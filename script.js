@@ -10,7 +10,7 @@ function renderPrompt() {
     if (!username) {
         promptPrefix.textContent = "system_login (Type your permanent username): ";
     } else {
-        promptPrefix.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">~</span><span class="symbol">$</span>`;
+        promptPrefix.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">~</span><span class="path"> $</span>`;
     }
 }
 
@@ -27,6 +27,8 @@ function printLine(htmlContent) {
 // level 0 = normal user, level 1 = requires sudo
 // ==========================================
 const commands = {
+
+    // Basic argumentless commands
     'clear': {
         level: 0,
         execute: (args) => {
@@ -40,8 +42,19 @@ const commands = {
             printLine("  clear   - Clear the terminal output");
             printLine("  help    - Display this help message");
             printLine("  userdel - Delete a user account (requires privileges)");
+            printLine("  echo    - Print a line of text to the standard output")
         }
     },
+    'exit': {
+        function () {
+  // Open a new, blank page in the current tab to "trick" the browser into thinking the script opened it
+  window.open('', '_self', ''); 
+  // Close the window
+  window.close();
+}
+    },
+
+    // Not basic argumentful commands
     'userdel': {
         level: 1, 
         execute: (args) => {
@@ -59,7 +72,22 @@ const commands = {
                 printLine(`userdel: user '${args[0]}' does not exist`);
             }
         }
+    },
+    'echo': {
+        level: 0,
+        execute: (args) => {
+            if (args[0].startsWith(`"`)) {
+                if (args[0].endsWith(`"`)) {
+                    printLine(`${args[0]}`.slice(1, -1));
+                } else {
+                    printLine(`bash: line 6: unexpected EOF while looking for matching '"'`);
+                }
+            } else if (args[0].match(/.+/)) {
+                printLine(`${args[0]}`);
+            }
+        }
     }
+    
 };
 
 // Handle Enter keypress
