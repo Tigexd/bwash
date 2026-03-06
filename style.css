@@ -1,9 +1,9 @@
 :root {
-    --bg-color: #0a0a0a;
-    --text-main: #fff; /* Classic Terminal Green */
+    --bg-color: #000000;
+    --text-main: #fff;
     --text-dim: #6B7280;
-    --user-color: #00ff00; /* Blue for the user/host */
-    --path-color: #0000ff; /* Yellow/Orange for the path */
+    --user-color: #00ff00;
+    --path-color: #0000ff;
 }
 
 body {
