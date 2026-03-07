@@ -2,16 +2,15 @@
     --bg-color: #000000;
     --text-main: #fff;
     --text-dim: #6B7280;
-    --user-color: #00ff00;
+    --user-color: #8ae234;
     --path-color: #0000ff;
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
-    font-family: 'Courier New', Courier, monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     margin: 0;
-    padding: 20px;
     font-size: 16px;
     line-height: 1.5;
     height: 100vh;

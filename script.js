@@ -23,7 +23,7 @@ function printLine(htmlContent) {
 
 // ==========================================
 // COMMAND REGISTRY
-// Add new commands here!
+// Add new commands here :3
 // level 0 = normal user, level 1 = requires sudo
 // ==========================================
 const commands = {
@@ -45,13 +45,11 @@ const commands = {
             printLine("  echo    - Print a line of text to the standard output")
         }
     },
-    'exit': {
-        function () {
-  // Open a new, blank page in the current tab to "trick" the browser into thinking the script opened it
-  window.open('', '_self', ''); 
-  // Close the window
-  window.close();
-}
+    'version': {
+        level: 0,
+        execute: (args) => {
+            printLine("Meepian")
+        }
     },
 
     // Not basic argumentful commands
