@@ -15,8 +15,6 @@ body {
     line-height: 1.5;
     height: 100vh;
     box-sizing: border-box;
-    overflow-x: hidden;
-    resize: none;
     border: 0;
     width: 0;
     padding: 0;
@@ -47,7 +45,6 @@ main {
 /* Styling for the prompt components */
 .user-host {
     color: var(--user-color);
-    font-weight: bold;
 }
 
 .path {
