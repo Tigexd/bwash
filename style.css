@@ -16,18 +16,10 @@ body {
     height: 100vh;
     box-sizing: border-box;
     overflow-x: hidden;
-    z-index: -5;
-    white-space: nowrap;
     resize: none;
     border: 0;
     width: 0;
-    height: 0;
-    margin: 0;
     padding: 0;
-    position: absolute;
-    top: 0;
-    left: -9999em;
-    overflow: hidden
 }
 
 /* Forces the input to stay focused even if the user clicks around the page */
