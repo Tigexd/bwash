@@ -9,10 +9,8 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
-    font-family: 'Courier New', Courier, monospace;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     margin: 0;
-    
     font-size: 16px;
     line-height: 1.5;
     height: 100vh;
@@ -64,7 +62,7 @@ input[type="text"] {
     font-size: inherit;
     outline: none;
     flex-grow: 1;
-    margin-left: 8px;
+    
     caret-color: var(--text-main);
     /* Makes the blinking cursor match */
 }
