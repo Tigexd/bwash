@@ -9,19 +9,15 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
+    font-family: 'Courier New', Courier, monospace;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     margin: 0;
+    padding: 20px;
     font-size: 16px;
     line-height: 1.5;
     height: 100vh;
     box-sizing: border-box;
-    border: 0;
-    width: 0;
-    padding: 0;
-    left: 3px;
-    top: 0px;
-    z-index: -5;
-    white-space: nowrap;
+    overflow-x: hidden;
 }
 
 /* Forces the input to stay focused even if the user clicks around the page */
