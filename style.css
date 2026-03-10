@@ -30,6 +30,9 @@ main {
     white-space: pre-wrap;
     /* Preserves spaces and line breaks */
     word-wrap: break-word;
+    margin:10px;
+    padding:10px;
+    border:2px solid #8ae234 ;
 }
 
 .input-line {
