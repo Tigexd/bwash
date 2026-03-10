@@ -80,7 +80,9 @@ function renderPrompt() {
         promptPrefix.textContent = "Create a username: ";
     } else {
         const displayPath = getPromptPath();
+        const htmlTitle = getElementById(htmlTitle);
         promptPrefix.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$</span>`;
+        htmlTitle.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$</span>`
     }
 }
 
