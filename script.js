@@ -2,8 +2,7 @@ const outputDiv = document.getElementById('output');
 const promptPrefix = document.getElementById('prompt-prefix');
 const cmdInput = document.getElementById('command-input');
 
-let $pageTitle = username;
-document.title = $pageTitle;
+
 
 // ==========================================
 // SILLY FILESYSTEM IMPLEMENTATION
