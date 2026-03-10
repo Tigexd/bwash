@@ -1,6 +1,9 @@
 const outputDiv = document.getElementById('output');
 const promptPrefix = document.getElementById('prompt-prefix');
 const cmdInput = document.getElementById('command-input');
+const htmlTitle = getElementById(htmlTitle);
+
+htmlTitle.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$</span>`;
 
 // ==========================================
 // SILLY FILESYSTEM IMPLEMENTATION
@@ -80,9 +83,7 @@ function renderPrompt() {
         promptPrefix.textContent = "Create a username: ";
     } else {
         const displayPath = getPromptPath();
-        const htmlTitle = getElementById(htmlTitle);
         promptPrefix.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$</span>`;
-        htmlTitle.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$</span>`
     }
 }
 
