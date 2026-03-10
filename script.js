@@ -8,6 +8,8 @@ function changeTitle() {
     htmlTitle.innerHTML = username + "@bash:" + displayPath;
 }
 
+changeTitle();
+
 // ==========================================
 // SILLY FILESYSTEM IMPLEMENTATION
 // ==========================================
@@ -229,7 +231,7 @@ const commands = {
             } else {
                 printLine(`bwash: cd: ${target}: No such file or directory`);
             }
-        }, changeTitle();
+        }
     },
 
     // ------------------------------------------
