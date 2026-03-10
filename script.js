@@ -432,4 +432,65 @@ if (!username) {
     printLine("Client IPv4: " + `<span >[</span><span id="status-ipv4"> .. </span><span>] </span></span><span id="ip-ipv4" style="color: var(--user-color);">Fetching...</span>`);
     printLine("Client IPv6: " + `<span >[</span><span id="status-ipv6"> .. </span><span>] </span></span><span id="ip-ipv6" style="color: var(--user-color);">Fetching...</span>`);
     printLine(`<span>[</span><span style="color: var(--user-color); font-weight: bold;"> OK </span><span>] </span><span>Connection established.</span>`);
+
+
+
+    function displayMaxDeviceInfo() {
+        const infoContainer = document.createElement('div');
+        infoContainer.id = 'device-info';
+        document.body.appendChild(infoContainer);
+
+        function addInfo(title, value) {
+            const p = document.createElement('p');
+            p.innerHTML = `<strong>${title}:</strong> ${value}`;
+            infoContainer.appendChild(p);
+        }
+
+        // Browser and Platform Information from window.navigator
+        addInfo('User Agent', navigator.userAgent || 'N/A');
+        addInfo('App Name', navigator.appName || 'N/A');
+        addInfo('App Version', navigator.appVersion || 'N/A');
+        addInfo('Platform/OS', navigator.platform || 'N/A');
+        addInfo('Language', navigator.language || 'N/A');
+        addInfo('User Languages', navigator.languages ? navigator.languages.join(', ') : 'N/A');
+        addInfo('Cookies Enabled', navigator.cookieEnabled ? 'Yes' : 'No');
+        addInfo('Online Status', navigator.onLine ? 'Online' : 'Offline');
+
+        // Hardware Information from window.navigator
+        addInfo('CPU Cores (Approx.)', navigator.hardwareConcurrency || 'N/A');
+        addInfo('Device Memory (GB, Approx.)', navigator.deviceMemory || 'N/A');
+        addInfo('Max Touch Points', navigator.maxTouchPoints || 'N/A');
+
+        // Screen Information from window.screen
+        addInfo('Screen Width', screen.width + 'px' || 'N/A');
+        addInfo('Screen Height', screen.height + 'px' || 'N/A');
+        addInfo('Available Screen Width', screen.availWidth + 'px' || 'N/A');
+        addInfo('Available Screen Height', screen.availHeight + 'px' || 'N/A');
+        addInfo('Color Depth', screen.colorDepth + ' bits' || 'N/A');
+        addInfo('Pixel Depth', screen.pixelDepth + ' bits' || 'N/A');
+
+        // Timezone Information
+        addInfo('Time Zone', Intl.DateTimeFormat().resolvedOptions().timeZone || 'N/A');
+
+        printLine('Device and Browser Information Collected:', {
+            userAgent: navigator.userAgent,
+            appName: navigator.appName,
+            appVersion: navigator.appVersion,
+            platform: navigator.platform,
+            language: navigator.language,
+            languages: navigator.languages,
+            cookieEnabled: navigator.cookieEnabled,
+            onLine: navigator.onLine,
+            hardwareConcurrency: navigator.hardwareConcurrency,
+            deviceMemory: navigator.deviceMemory,
+            maxTouchPoints: navigator.maxTouchPoints,
+            screenWidth: screen.width,
+            screenHeight: screen.height,
+            availScreenWidth: screen.availWidth,
+            availScreenHeight: screen.availHeight,
+            colorDepth: screen.colorDepth,
+            pixelDepth: screen.pixelDepth,
+            timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        });
+    }
 }
