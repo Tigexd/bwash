@@ -1,7 +1,13 @@
 const outputDiv = document.getElementById('output');
 const promptPrefix = document.getElementById('prompt-prefix');
 const cmdInput = document.getElementById('command-input');
+const htmlTitle = document.getElementById("htmlTitle");
 
+// Silly title changer
+function changeTitle() {
+    // Corrected to use proper template literal syntax
+    htmlTitle.innerHTML = `${username}@bash:${displayPath}`;
+}
 
 // ==========================================
 // SILLY FILESYSTEM IMPLEMENTATION
@@ -196,22 +202,22 @@ const commands = {
             const target = args[0];
             if (!target || target === '~') {
                 currentPath = ["home", username];
-                return;changeTitle();
+                return;
             }
 
             let newPath = [...currentPath];
 
             // Handle absolute paths
             if (target.startsWith('/')) {
-                newPath = [];changeTitle();
+                newPath = [];
             }
 
             const parts = target.split('/').filter(p => p !== '');
 
             for (const part of parts) {
-                if (part === '.') continue;changeTitle();
+                if (part === '.') continue;
                 if (part === '..') {
-                    if (newPath.length > 0) newPath.pop();changeTitle();
+                    if (newPath.length > 0) newPath.pop();
                 } else {
                     newPath.push(part);
                     changeTitle();
