@@ -98,6 +98,24 @@ function printLine(htmlContent) {
 // ==========================================
 const commands = {
 
+    // Commands for funziez :D
+
+    'bk': {
+        level: 0,
+        execute: (args) => {
+            const path = require('path');
+            const fs = require('fs');
+
+            // Use __dirname to start from the current script's folder
+            const filePath = path.join(__dirname, 'ascii', 'bk.txt');
+
+            // Read and log the file
+            fs.readFile(filePath, 'utf8', (err, data) => {
+                if (err) throw err;
+                printLine(data);
+            });
+        }
+    },
     // -----------------------------------------
     // Basic static boring argumentless commands
     // -----------------------------------------
