@@ -2,6 +2,7 @@ const outputDiv = document.getElementById('output');
 const promptPrefix = document.getElementById('prompt-prefix');
 const cmdInput = document.getElementById('command-input');
 
+
 // ==========================================
 // SILLY FILESYSTEM IMPLEMENTATION
 // ==========================================
@@ -347,29 +348,78 @@ renderPrompt();
 
 // Silly IP fetcher
 function getVisitorIP() {
+    const timerId4 = setTimeout(() => {
+        console.error('Timeout fetching IP');
+        document.getElementById('ip-ipv4').textContent = 'Timeout fetching IP';
+        document.getElementById('ip-ipv4').style.color = 'red';
+        document.getElementById('status-ipv4').textContent = 'FAIL';
+        document.getElementById('status-ipv4').style.color = 'red';
+        printLine(`<span style="color: red;">Failed to fetch IPv4 address. This may be due to your network configuration or opening the page in a private browser window or being on a school network.</span>`);
+        failedFetch = true;
+    }, 3000);
+
+    const timerId6 = setTimeout(() => {
+        console.error('Timeout fetching IP');
+        document.getElementById('ip-ipv6').textContent = 'Timeout fetching IP';
+        document.getElementById('ip-ipv6').style.color = 'red';
+        document.getElementById('status-ipv6').textContent = 'FAIL';
+        document.getElementById('status-ipv6').style.color = 'red';
+        printLine(`<span style="color: red;">Failed to fetch IPv6 address. This may be due to your network configuration or opening the page in a private browser window or being on a school network.</span>`);
+        failedFetch = true;
+    }, 3000);
+
+    // ipv4 grabber
+
     fetch('https://api.ipify.org/?format=json')
         .then(response => response.json())
         .then(data => {
             // Update the HTML element with the fetched IP address
             document.getElementById('ip-ipv4').textContent = data.ip;
+            document.getElementById('status-ipv4').textContent = ' OK ';
+            document.getElementById('status-ipv4').style.color = 'var(--user-color)';
         })
         .catch(error => {
             // Handle any errors that may occur during the fetch operation
             console.error('Error fetching IP:', error);
             document.getElementById('ip-ipv4').textContent = 'Error fetching IP';
-        });
+            document.getElementById('ip-ipv4').style.color = 'red';
+            document.getElementById('status-ipv4').textContent = 'FAIL';
+            document.getElementById('status-ipv4').style.color = 'red';
+            printLine(`<span style="color: red;">Failed to fetch IPv4 address. This may be due to your network configuration or opening the page in a private browser window.</span>`);
+            failedFetch = true;
+        })
+        .finally(() => clearTimeout(timerId4))
+        ;
+
+    navigator.userAgentData.getHighEntropyValues(["platform", "platformVersion", "architecture", "model", "uaFullVersion"])
+
+
+    // ipv6 grabber
+
     fetch('https://api64.ipify.org/?format=json')
         .then(response => response.json())
         .then(data => {
             // Update the HTML element with the fetched IP address
             document.getElementById('ip-ipv6').textContent = data.ip;
+            document.getElementById('status-ipv6').textContent = ' OK ';
+            document.getElementById('status-ipv6').style.color = 'var(--user-color)';
         })
         .catch(error => {
             // Handle any errors that may occur during the fetch operation
             console.error('Error fetching IP:', error);
             document.getElementById('ip-ipv6').textContent = 'Error fetching IP';
-        });
+            document.getElementById('ip-ipv6').style.color = 'red';
+            document.getElementById('status-ipv6').textContent = 'FAIL';
+            document.getElementById('status-ipv6').style.color = 'red';
+            printLine(`<span style="color: red;">Failed to fetch IPv6 address. This may be due to your network configuration or opening the page in a private browser window.</span>`);
+            failedFetch = true;
+        })
+        .finally(() => clearTimeout(timerId6))
+        ;
+
+
 }
+
 
 // Call the function when the page loads
 document.addEventListener('DOMContentLoaded', getVisitorIP);
@@ -378,9 +428,7 @@ document.addEventListener('DOMContentLoaded', getVisitorIP);
 if (!username) {
     printLine(`Establishing connection...`);
     printLine(`Fetching Client IP...` + `<span id="ip-fetching" style="color: var(--user-color);">[IPv4 & IPv6]</span>`);
-    printLine("Client IPv4: " + `<span >[</span><span style="color: var(--user-color);"> OK </span><span>] </span></span><span id="ip-ipv4" style="color: var(--user-color);">Fetching...</span>`);
-    printLine("Client IPv6: " + `<span >[</span><span style="color: var(--user-color);"> OK </span><span>] </span></span><span id="ip-ipv6" style="color: var(--user-color);">Fetching...</span>`);
-    printLine("Welcome to the interface. Connection established.");
+    printLine("Client IPv4: " + `<span >[</span><span id="status-ipv4"> .. </span><span>] </span></span><span id="ip-ipv4" style="color: var(--user-color);">Fetching...</span>`);
+    printLine("Client IPv6: " + `<span >[</span><span id="status-ipv6"> .. </span><span>] </span></span><span id="ip-ipv6" style="color: var(--user-color);">Fetching...</span>`);
+    printLine(`<span>[</span><span style="color: var(--user-color); font-weight: bold;"> OK </span><span>] </span><span>Connection established.</span>`);
 }
-
-
