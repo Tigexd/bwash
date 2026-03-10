@@ -5,8 +5,7 @@ const htmlTitle = document.getElementById("htmlTitle");
 
 // Silly title changer
 function changeTitle() {
-    // Corrected to use proper template literal syntax
-    htmlTitle.innerHTML = `${username}@bash:${displayPath}`;
+    htmlTitle.innerHTML = username + "@bash:" + displayPath;
 }
 
 // ==========================================
@@ -220,7 +219,7 @@ const commands = {
                     if (newPath.length > 0) newPath.pop();
                 } else {
                     newPath.push(part);
-                    
+
                 }
             }
 
@@ -264,6 +263,7 @@ There is NO WARRANTY, to the extent permitted by law.`);
 // Handle Enter keypress
 cmdInput.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
+        changeTitle(); // Calls your function
         const val = this.value.trim();
 
         if (!username) {
