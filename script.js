@@ -196,32 +196,33 @@ const commands = {
             const target = args[0];
             if (!target || target === '~') {
                 currentPath = ["home", username];
-                return;
+                return;changeTitle();
             }
 
             let newPath = [...currentPath];
 
             // Handle absolute paths
             if (target.startsWith('/')) {
-                newPath = [];
+                newPath = [];changeTitle();
             }
 
             const parts = target.split('/').filter(p => p !== '');
 
             for (const part of parts) {
-                if (part === '.') continue;
+                if (part === '.') continue;changeTitle();
                 if (part === '..') {
-                    if (newPath.length > 0) newPath.pop();
+                    if (newPath.length > 0) newPath.pop();changeTitle();
                 } else {
                     newPath.push(part);
+                    changeTitle();
                 }
             }
 
             // Validate the new path
             if (getDirFromPath(newPath) !== null) {
-                currentPath = newPath;
+                currentPath = newPath;changeTitle();
             } else {
-                printLine(`bwash: cd: ${target}: No such file or directory`);
+                printLine(`bwash: cd: ${target}: No such file or directory`);changeTitle();
             }
         }
     },
