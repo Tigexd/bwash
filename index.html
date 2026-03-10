@@ -26,14 +26,14 @@
     htmlTitle.innerHTML = username + "@bash:" + displayPath;
 }
 
-const input = document.getElementById("command-input");
+setInterval(changeTitle, 1000);
 
-input.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        changeTitle(); // Calls your function
-    }
-});
+function stopTimer() {
+  clearInterval(intervalId); // Stop the function calls using the ID
+  console.log("The interval has been stopped.");
+  printLine("changeTitle() stopped");
 }
+
     </script>
 
 </body>
