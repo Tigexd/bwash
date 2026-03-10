@@ -2,19 +2,88 @@ const outputDiv = document.getElementById('output');
 const promptPrefix = document.getElementById('prompt-prefix');
 const cmdInput = document.getElementById('command-input');
 
-// Check for cached user
+// ==========================================
+// SILLY FILESYSTEM IMPLEMENTATION
+// ==========================================
+
+// The base FHS skeleton
+const baseFHS = {
+    "bin": { type: "dir", content: {} },
+    "boot": { type: "dir", content: {} },
+    "dev": { type: "dir", content: {} },
+    "etc": { type: "dir", content: {} },
+    "home": { type: "dir", content: {} },
+    "root": { type: "dir", content: {} },
+    "var": {
+        type: "dir",
+        content: {
+            "www": { type: "dir", content: {} } // Perfect place to mount your future web apps
+        }
+    }
+};
+
+// State variables
 let username = localStorage.getItem('terminal_user');
+let fileSystem = JSON.parse(localStorage.getItem('bwash_fs'));
+let currentPath = []; // Array representing path. Empty array = '/'
+
+// Initialize File System if it doesn't exist
+if (!fileSystem) {
+    fileSystem = baseFHS;
+    saveFS();
+}
+
+// Helper to save FS state to client storage
+function saveFS() {
+    localStorage.setItem('bwash_fs', JSON.stringify(fileSystem));
+}
+
+// Helper to get the actual directory object from a path array
+function getDirFromPath(pathArray) {
+    let current = fileSystem;
+    for (let i = 0; i < pathArray.length; i++) {
+        if (current[pathArray[i]] && current[pathArray[i]].type === 'dir') {
+            current = current[pathArray[i]].content;
+        } else {
+            return null; // Path invalid or is a file
+        }
+    }
+    return current;
+}
+
+// Setup user home directory on login
+function initUserSpace(user) {
+    if (!fileSystem["home"].content[user]) {
+        fileSystem["home"].content[user] = { type: "dir", content: {} };
+        saveFS();
+    }
+    currentPath = ["home", user]; // Set default path to ~
+}
+
+// ==========================================
+// UI & TERMINAL LOGIC
+// ==========================================
+
+
+// Calculate prompt path string
+function getPromptPath() {
+    const pathString = '/' + currentPath.join('/');
+    if (username && pathString === `/home/${username}`) {
+        return '~';
+    }
+    return pathString === '/' ? '/' : pathString;
+}
 
 // Function to update the prompt
 function renderPrompt() {
     if (!username) {
-        promptPrefix.textContent = "system_login (Type your permanent username): ";
+        promptPrefix.textContent = "Create a username: ";
     } else {
-        promptPrefix.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">~</span><span class="path"> $</span>`;
+        const displayPath = getPromptPath();
+        promptPrefix.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$</span>`;
     }
 }
 
-// Helper to print a new line
 function printLine(htmlContent) {
     const line = document.createElement('div');
     line.innerHTML = htmlContent;
@@ -23,12 +92,14 @@ function printLine(htmlContent) {
 
 // ==========================================
 // COMMAND REGISTRY
-// Add new commands here :3
 // level 0 = normal user, level 1 = requires sudo
 // ==========================================
 const commands = {
 
-    // Basic argumentless commands
+    // -----------------------------------------
+    // Basic static boring argumentless commands
+    // -----------------------------------------
+
     'clear': {
         level: 0,
         execute: (args) => {
@@ -42,28 +113,34 @@ const commands = {
             printLine("  clear   - Clear the terminal output");
             printLine("  help    - Display this help message");
             printLine("  userdel - Delete a user account (requires privileges)");
-            printLine("  echo    - Print a line of text to the standard output")
+            printLine("  echo    - Print a line of text to the standard output");
+            printLine("  pwd     - Print working directory");
+            printLine("  ls      - List directory contents");
+            printLine("  cd      - Change directory");
         }
     },
     'version': {
         level: 0,
         execute: (args) => {
-            printLine("Meepian")
+            printLine("Meepian");
         }
     },
 
+    // -----------------------------------------
     // Not basic argumentful commands
+    // -----------------------------------------
+
     'userdel': {
-        level: 1, 
+        level: 1,
         execute: (args) => {
-            // args[0] is the first word after the command
             if (args[0] === username) {
                 localStorage.removeItem('terminal_user');
                 username = null;
+                currentPath = [];
                 outputDiv.innerHTML = '';
                 renderPrompt();
                 printLine("User deleted. Connection terminated.");
-                setTimeout(() => printLine("system_login (Type your permanent username): "), 500); // Small delay for effect
+                setTimeout(() => printLine("Create a username: "), 500);
             } else if (!args[0]) {
                 printLine(`userdel: missing operand`);
             } else {
@@ -74,73 +151,182 @@ const commands = {
     'echo': {
         level: 0,
         execute: (args) => {
-            if (args[0].startsWith(`"`)) {
-                if (args[0].endsWith(`"`)) {
-                    printLine(`${args[0]}`.slice(1, -1));
+            let output = args.join(' '); // Join all arguments back into a single string
+            if (output.startsWith(`"`)) {
+                if (output.endsWith(`"`)) {
+                    printLine(output.slice(1, -1));
                 } else {
-                    printLine(`bash: line 6: unexpected EOF while looking for matching '"'`);
+                    printLine(`bwash: unexpected EOF while looking for matching '"'`);
                 }
-            } else if (args[0].match(/.+/)) {
-                printLine(`${args[0]}`);
+            } else if (output.length > 0) {
+                printLine(output);
             }
         }
+    },
+
+    // -----------------------------------------
+    // Filesystem monster (argumentless)
+    // -----------------------------------------
+
+    'pwd': {
+        level: 0,
+        execute: (args) => {
+            printLine('/' + currentPath.join('/'));
+        }
+    },
+    'ls': {
+        level: 0,
+        execute: (args) => {
+            const currentDir = getDirFromPath(currentPath);
+            const items = Object.keys(currentDir).sort();
+            if (items.length > 0) {
+                printLine(`<span style="color: var(--user-color);">${items.join('&nbsp;&nbsp;&nbsp;')}</span>`);
+            }
+        }
+    },
+
+    // -----------------------------------------
+    // Filesystem monster (argumentful)
+    // -----------------------------------------
+
+    'cd': {
+        level: 0,
+        execute: (args) => {
+            const target = args[0];
+            if (!target || target === '~') {
+                currentPath = ["home", username];
+                return;
+            }
+
+            let newPath = [...currentPath];
+
+            // Handle absolute paths
+            if (target.startsWith('/')) {
+                newPath = [];
+            }
+
+            const parts = target.split('/').filter(p => p !== '');
+
+            for (const part of parts) {
+                if (part === '.') continue;
+                if (part === '..') {
+                    if (newPath.length > 0) newPath.pop();
+                } else {
+                    newPath.push(part);
+                }
+            }
+
+            // Validate the new path
+            if (getDirFromPath(newPath) !== null) {
+                currentPath = newPath;
+            } else {
+                printLine(`bwash: cd: ${target}: No such file or directory`);
+            }
+        }
+    },
+
+    // ------------------------------------------
+    // PROGRAM/SERVICE COMMANDS
+    // ------------------------------------------
+
+    'bash': {
+        level: 0,
+        execute: (args) => {
+            let output = args.join(' '); // Join all arguments back into a single string
+            if (output === (`--version`)) {
+                printLine(`
+                GNU bwash, version 1.13 - release(v8/blink-js-gnu)
+                Copyleft(C) 2026 ProtoGenuin, AG.
+License GPLv3 +: GNU GPL version 3 or later < http://gnu.org/licenses/gpl.html>
+
+This is free software; you are free to change and redistribute it. BUT YOU ARE ABSOLUTELY NOT ALLOWED TO SELL THIS SOFTWARE FOR PROFIT. For details see the COPYING file that came with this software.
+There is NO WARRANTY, to the extent permitted by law.`);
+            } else if (output === (``)) {
+                renderPrompt();
+            }
+
+        }
     }
-    
 };
 
+// ==========================================
+// HTML EVENT LISTENERS & INIT
+// ==========================================
+
 // Handle Enter keypress
-cmdInput.addEventListener('keydown', function(e) {
+cmdInput.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
         const val = this.value.trim();
-        
+
         if (!username) {
+
+            // ---------------------------------
             // Handle initial login
+            // ---------------------------------
+
             if (val) {
                 username = val;
                 localStorage.setItem('terminal_user', username);
+                initUserSpace(username); // Create their home folder
                 printLine(`Initializing environment for user: <span class="user-host">${username}</span>... done.`);
                 renderPrompt();
             }
         } else {
+
+            // ---------------------------------------------------------
             // Echo the command to the output with the prompt prefix
+            // ---------------------------------------------------------
+
             printLine(`${promptPrefix.innerHTML} ${val}`);
-            
+
             if (val !== "") {
-                // Parse the command and arguments
-                // Split by spaces, filter out empty strings in case of double spaces
                 const parts = val.split(' ').filter(part => part.trim() !== '');
-                
+
                 let isSudo = false;
                 let cmdName = parts[0].toLowerCase();
                 let args = parts.slice(1);
 
-                // Check for sudo flag
+                // ===========================================
+                // SUDO CHRCKER
+                // ===========================================
+
                 if (cmdName === 'sudo') {
                     isSudo = true;
-                    cmdName = args[0] ? args[0].toLowerCase() : ''; // The actual command is now the next word
-                    args = args.slice(1); // Shift arguments over again
+                    cmdName = args[0] ? args[0].toLowerCase() : '';
+                    args = args.slice(1);
                 }
 
-                // Execute logic
-                if (cmdName === '') {
-                    // User just typed "sudo" and nothing else
-                    printLine(`usage: sudo <command>`);
+                // ===========================================
+                // EXECUTE LOGIC
+                // ===========================================
+
+                if (cmdName === '') { // User just typed "sudo" with no command
+                    printLine(`usage: sudo -h | -K | -k | -V
+usage: sudo -v [-ABkNnS] [-g group] [-h host] [-p prompt] [-u user]
+usage: sudo -l [-ABkNnS] [-g group] [-h host] [-p prompt] [-U user]
+            [-u user] [command [arg ...]]
+usage: sudo [-ABbEHkNnPS] [-r role] [-t type] [-C num] [-D directory]
+            [-g group] [-h host] [-p prompt] [-R directory] [-T timeout]
+            [-u user] [VAR=value] [-i | -s] [command [arg ...]]
+usage: sudo -e [-ABkNnS] [-r role] [-t type] [-C num] [-D directory]
+            [-g group] [-h host] [-p prompt] [-R directory] [-T timeout]
+            [-u user] file ...`);
                 } else if (commands[cmdName]) {
                     const cmd = commands[cmdName];
-                    
+
                     // Permission Check
                     if (cmd.level > 0 && !isSudo) {
                         printLine(`bwash: ${cmdName}: Permission denied`);
                     } else {
-                        // Execute the command, passing in any arguments
                         cmd.execute(args);
+                        renderPrompt(); // Update prompt in case path changed
                     }
                 } else {
                     printLine(`bwash: ${cmdName}: command not found`);
                 }
             }
         }
-        
+
         // Clear input and scroll to bottom
         this.value = '';
         window.scrollTo(0, document.body.scrollHeight);
@@ -152,9 +338,49 @@ document.addEventListener('click', () => {
     cmdInput.focus();
 });
 
-// Init
+// Init Sequence
+if (username) {
+    initUserSpace(username); // Make sure their path is set on page reload
+}
 renderPrompt();
 
-if(!username) {
+
+// Silly IP fetcher
+function getVisitorIP() {
+    fetch('https://api.ipify.org/?format=json')
+        .then(response => response.json())
+        .then(data => {
+            // Update the HTML element with the fetched IP address
+            document.getElementById('ip-ipv4').textContent = data.ip;
+        })
+        .catch(error => {
+            // Handle any errors that may occur during the fetch operation
+            console.error('Error fetching IP:', error);
+            document.getElementById('ip-ipv4').textContent = 'Error fetching IP';
+        });
+    fetch('https://api64.ipify.org/?format=json')
+        .then(response => response.json())
+        .then(data => {
+            // Update the HTML element with the fetched IP address
+            document.getElementById('ip-ipv6').textContent = data.ip;
+        })
+        .catch(error => {
+            // Handle any errors that may occur during the fetch operation
+            console.error('Error fetching IP:', error);
+            document.getElementById('ip-ipv6').textContent = 'Error fetching IP';
+        });
+}
+
+// Call the function when the page loads
+document.addEventListener('DOMContentLoaded', getVisitorIP);
+
+
+if (!username) {
+    printLine(`Establishing connection...`);
+    printLine(`Fetching Client IP...` + `<span id="ip-fetching" style="color: var(--user-color);">[IPv4 & IPv6]</span>`);
+    printLine("Client IPv4: " + `<span >[</span><span style="color: var(--user-color);"> OK </span><span>] </span></span><span id="ip-ipv4" style="color: var(--user-color);">Fetching...</span>`);
+    printLine("Client IPv6: " + `<span >[</span><span style="color: var(--user-color);"> OK </span><span>] </span></span><span id="ip-ipv6" style="color: var(--user-color);">Fetching...</span>`);
     printLine("Welcome to the interface. Connection established.");
 }
+
+
