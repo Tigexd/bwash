@@ -220,15 +220,15 @@ const commands = {
                     if (newPath.length > 0) newPath.pop();
                 } else {
                     newPath.push(part);
-                    changeTitle();
+                    
                 }
             }
 
             // Validate the new path
             if (getDirFromPath(newPath) !== null) {
-                currentPath = newPath;changeTitle();
+                currentPath = newPath;
             } else {
-                printLine(`bwash: cd: ${target}: No such file or directory`);changeTitle();
+                printLine(`bwash: cd: ${target}: No such file or directory`);
             }
         }
     },
