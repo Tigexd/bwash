@@ -1,9 +1,6 @@
 const outputDiv = document.getElementById('output');
 const promptPrefix = document.getElementById('prompt-prefix');
 const cmdInput = document.getElementById('command-input');
-const htmlTitle = getElementById(htmlTitle);
-
-htmlTitle.innerHTML = `${username}@bwash:${displayPath}$`;
 
 // ==========================================
 // SILLY FILESYSTEM IMPLEMENTATION
