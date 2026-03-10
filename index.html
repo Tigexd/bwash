@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="htmlTitle"></title>
+    <title></title>
     <link rel="stylesheet" href="style.css">
 
 </head>
@@ -21,20 +21,6 @@
     </main>
 
     <script src="script.js"></script>
-    <script>
-        function changeTitle() {
-    htmlTitle.innerHTML = username + "@bash:" + displayPath;
-}
-
-setInterval(changeTitle, 1000);
-
-function stopTimer() {
-  clearInterval(intervalId); // Stop the function calls using the ID
-  console.log("The interval has been stopped.");
-  printLine("changeTitle() stopped");
-}
-
-    </script>
 
 </body>
 
