@@ -229,7 +229,7 @@ const commands = {
             } else {
                 printLine(`bwash: cd: ${target}: No such file or directory`);
             }
-        }
+        }, changeTitle();
     },
 
     // ------------------------------------------
@@ -263,7 +263,7 @@ There is NO WARRANTY, to the extent permitted by law.`);
 // Handle Enter keypress
 cmdInput.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
-        changeTitle(); // Calls your function
+        
         const val = this.value.trim();
 
         if (!username) {
