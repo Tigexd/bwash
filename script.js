@@ -1,14 +1,7 @@
 const outputDiv = document.getElementById('output');
 const promptPrefix = document.getElementById('prompt-prefix');
 const cmdInput = document.getElementById('command-input');
-const htmlTitle = document.getElementById("htmlTitle");
 
-// Silly title changer
-function changeTitle() {
-    htmlTitle.innerHTML = username + "@bash:" + displayPath;
-}
-
-changeTitle();
 
 // ==========================================
 // SILLY FILESYSTEM IMPLEMENTATION
@@ -221,7 +214,6 @@ const commands = {
                     if (newPath.length > 0) newPath.pop();
                 } else {
                     newPath.push(part);
-
                 }
             }
 
@@ -265,7 +257,6 @@ There is NO WARRANTY, to the extent permitted by law.`);
 // Handle Enter keypress
 cmdInput.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
-        
         const val = this.value.trim();
 
         if (!username) {
