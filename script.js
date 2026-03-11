@@ -105,26 +105,26 @@ function displayMaxDeviceInfo() {
     // Timezone Information
     addInfo('Time Zone', Intl.DateTimeFormat().resolvedOptions().timeZone || 'N/A');
 
-    printLine('Device and Browser Information Collected:', 
-        `userAgent:` navigator.userAgent,
-        `appName:` navigator.appName,
-        `appVersion:` navigator.appVersion,
-        `platform:` navigator.platform,
-        `language:` navigator.language,
-        `languages:` navigator.languages,
-        `cookieEnabled:` navigator.cookieEnabled,
-        `onLine:` navigator.onLine,
-        `hardwareConcurrency:` navigator.hardwareConcurrency,
-        `deviceMemory:` navigator.deviceMemory,
-        `maxTouchPoints:` navigator.maxTouchPoints,
-        `screenWidth:` screen.width,
-        `screenHeight:` screen.height,
-        `availScreenWidth:` screen.availWidth,
-        `availScreenHeight:` screen.availHeight,
-        `colorDepth:` screen.colorDepth,
-        `pixelDepth:` screen.pixelDepth,
-        `timeZone:` Intl.DateTimeFormat().resolvedOptions().timeZone
-    );
+    printLine('Device and Browser Information Collected:', `
+        userAgent: ${navigator.userAgent},
+        appName: ${navigator.appName},
+        appVersion: ${navigator.appVersion},
+        platform: ${navigator.platform},
+        language: ${navigator.language},
+        languages: ${navigator.languages},
+        cookieEnabled: ${navigator.cookieEnabled},
+        onLine: ${navigator.onLine},
+        hardwareConcurrency: ${navigator.hardwareConcurrency},
+        deviceMemory: ${navigator.deviceMemory},
+        maxTouchPoints: ${navigator.maxTouchPoints},
+        screenWidth: ${screen.width},
+        screenHeight: ${screen.height},
+        availScreenWidth: ${screen.availWidth},
+        availScreenHeight: ${screen.availHeight},
+        colorDepth: ${screen.colorDepth},
+        pixelDepth: ${screen.pixelDepth},
+        timeZone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}
+    `);
 }
 
 
