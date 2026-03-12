@@ -8,7 +8,7 @@ const cmdInput = document.getElementById('command-input');
 // SILLY FILESYSTEM IMPLEMENTATION
 // ==========================================
 
-// The base FHS skeleton
+// root dir FHS
 const baseFHS = {
     "bin": { type: "dir", content: {} },
     "boot": { type: "dir", content: {} },
@@ -19,17 +19,17 @@ const baseFHS = {
     "var": {
         type: "dir",
         content: {
-            "www": { type: "dir", content: {} } // Perfect place to mount your future web apps
+            "www": { type: "dir", content: {} } // maybe future web apps
         }
     }
 };
 
-// State variables
+// universal vars
 let username = localStorage.getItem('terminal_user');
 let fileSystem = JSON.parse(localStorage.getItem('bwash_fs'));
 let currentPath = []; // Array representing path. Empty array = '/'
 
-// Initialize File System if it doesn't exist
+// initialize File System if it doesn't exist
 if (!fileSystem) {
     fileSystem = baseFHS;
     saveFS();
@@ -91,8 +91,6 @@ function displayMaxDeviceInfo() {
     Time Zone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}
     `);
 }
-
-
 
 // Calculate prompt path string
 function getPromptPath() {
@@ -298,7 +296,7 @@ There is NO WARRANTY, to the extent permitted by law.`);
 // HTML EVENT LISTENERS & INIT
 // ==========================================
 
-// Handle Enter keypress
+// handle enter
 cmdInput.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
         const val = this.value.trim();
