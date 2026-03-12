@@ -105,8 +105,7 @@ function displayMaxDeviceInfo() {
     // Timezone Information
     addInfo('Time Zone', Intl.DateTimeFormat().resolvedOptions().timeZone || 'N/A');
 
-    function compactDisplay() {
-    printLine(`Device and Browser Information Collected:
+    console.log(`Device and Browser Information Collected:
         userAgent: ${navigator.userAgent},
         appName: ${navigator.appName},
         appVersion: ${navigator.appVersion},
@@ -125,7 +124,7 @@ function displayMaxDeviceInfo() {
         colorDepth: ${screen.colorDepth},
         pixelDepth: ${screen.pixelDepth},
         timeZone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}
-    `)};
+    `);
 }
 
 
@@ -513,5 +512,5 @@ if (!username) {
     printLine("Client IPv4: " + `<span >[</span><span id="status-ipv4"> .. </span><span>] </span></span><span id="ip-ipv4" style="color: var(--user-color);">Fetching...</span>`);
     printLine("Client IPv6: " + `<span >[</span><span id="status-ipv6"> .. </span><span>] </span></span><span id="ip-ipv6" style="color: var(--user-color);">Fetching...</span>`);
     printLine(`<span>[</span><span style="color: var(--user-color); font-weight: bold;"> OK </span><span>] </span><span>Connection established.</span>`);
-    compactDisplay()
+    displayMaxDeviceInfo()
 }
