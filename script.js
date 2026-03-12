@@ -53,7 +53,7 @@ function getDirFromPath(pathArray) {
     return current;
 }
 
-// Setup user home directory on login
+// Setup user home dir on login
 function initUserSpace(user) {
     if (!fileSystem["home"].content[user]) {
         fileSystem["home"].content[user] = { type: "dir", content: {} };
@@ -63,7 +63,7 @@ function initUserSpace(user) {
 }
 
 // ==========================================
-// UI & TERMINAL LOGIC
+// tui and logics
 // ==========================================
 
 
