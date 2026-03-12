@@ -35,12 +35,12 @@ if (!fileSystem) {
     saveFS();
 }
 
-// Helper to save FS state to client storage
+// saved current dir to localstorage
 function saveFS() {
     localStorage.setItem('bwash_fs', JSON.stringify(fileSystem));
 }
 
-// Helper to get the actual directory object from a path array
+// dir path helper
 function getDirFromPath(pathArray) {
     let current = fileSystem;
     for (let i = 0; i < pathArray.length; i++) {
