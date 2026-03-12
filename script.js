@@ -8,6 +8,28 @@ const cmdInput = document.getElementById('command-input');
 // SILLY FILESYSTEM IMPLEMENTATION
 // ==========================================
 
+
+// The base PKG skeleton
+const basePKG = {
+    "hyfetch": { type: "pkg", packgClump },
+    "nnn": { type: "pkg", packgClump: "package-clump/" },
+    "git": {
+        type: "pkg",
+        path: "/usr/src/bin/git.js",
+        installed: true
+    },
+    "etc": {
+        type: "pkg",
+        path: "/usr/src/bin/git.js",
+        installed: true
+    },
+    "home": { type: "dir", packgClump: "package-clump/" },
+    "root": { type: "dir", packgClump: "package-clump/" },
+    "var": { type: "dir", packgClump: "package-clump/" }
+};
+
+
+
 // The base FHS skeleton
 const baseFHS = {
     "bin": { type: "dir", content: {} },
@@ -277,7 +299,7 @@ const commands = {
     'bash': {
         level: 0,
         execute: (args) => {
-            let output = args.join(' '); // Join all arguments back into a single string
+            let output = args.join(' ');
             if (output === (`--version`)) {
                 printLine(`
                 GNU bwash, version 1.13 - release(v8/blink-js-gnu)
@@ -288,6 +310,21 @@ This is free software; you are free to change and redistribute it. BUT YOU ARE A
 There is NO WARRANTY, to the extent permitted by law.`);
             } else if (output === (``)) {
                 renderPrompt();
+            }
+
+        }
+    },
+
+    // =====================================
+    // APT ATTEMPT
+    // =====================================
+
+    'apt': {
+        level: 1,
+        execute: (args) => {
+            let output = args.join(' ');
+            if (output === (`install`)) {
+
             }
 
         }
