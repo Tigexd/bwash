@@ -105,7 +105,7 @@ function displayMaxDeviceInfo() {
     // Timezone Information
     addInfo('Time Zone', Intl.DateTimeFormat().resolvedOptions().timeZone || 'N/A');
 
-    console.log(`Device and Browser Information Collected:
+    printLine(`Device and Browser Information Collected:
         userAgent: ${navigator.userAgent},
         appName: ${navigator.appName},
         appVersion: ${navigator.appVersion},
