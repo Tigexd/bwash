@@ -225,7 +225,7 @@ const commands = {
             const currentDir = getDirFromPath(currentPath);
             const items = Object.keys(currentDir).sort();
             if (items.length > 0) {
-                printLine(`<span style="color: var(--user-color);">${items.join('&nbsp;&nbsp;&nbsp;')}</span>`);
+                printLine(items.join('&nbsp;&nbsp;&nbsp;'));
             }
         }
     },
