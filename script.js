@@ -418,6 +418,7 @@ function getVisitorIP() {
             document.getElementById('ip-ipv4').textContent = data.ip;
             document.getElementById('status-ipv4').textContent = ' OK ';
             document.getElementById('status-ipv4').style.color = 'var(--user-color)';
+            document.getElementById('status-ipv4').style.fontWeight = 'bold';
         })
         .catch(error => {
             // Handle any errors that may occur during the fetch operation
@@ -444,6 +445,7 @@ function getVisitorIP() {
             document.getElementById('ip-ipv6').textContent = data.ip;
             document.getElementById('status-ipv6').textContent = ' OK ';
             document.getElementById('status-ipv6').style.color = 'var(--user-color)';
+            document.getElementById('status-ipv4').style.fontWeight = 'bold';
         })
         .catch(error => {
             // Handle any errors that may occur during the fetch operation
