@@ -105,6 +105,7 @@ function displayMaxDeviceInfo() {
     // Timezone Information
     addInfo('Time Zone', Intl.DateTimeFormat().resolvedOptions().timeZone || 'N/A');
 
+    function compactDisplay() {
     printLine(`Device and Browser Information Collected:
         userAgent: ${navigator.userAgent},
         appName: ${navigator.appName},
@@ -124,7 +125,7 @@ function displayMaxDeviceInfo() {
         colorDepth: ${screen.colorDepth},
         pixelDepth: ${screen.pixelDepth},
         timeZone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}
-    `);
+    `)};
 }
 
 
