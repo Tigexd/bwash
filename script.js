@@ -69,25 +69,26 @@ function initUserSpace(user) {
 
 // Get device info function
 function displayMaxDeviceInfo() {
+
     printLine(`Device and Browser Information Collected:
-        userAgent: ${navigator.userAgent},
-        appName: ${navigator.appName},
-        appVersion: ${navigator.appVersion},
-        platform: ${navigator.platform},
-        language: ${navigator.language},
-        languages: ${navigator.languages},
-        cookieEnabled: ${navigator.cookieEnabled},
-        onLine: ${navigator.onLine},
-        hardwareConcurrency: ${navigator.hardwareConcurrency},
-        deviceMemory: ${navigator.deviceMemory},
-        maxTouchPoints: ${navigator.maxTouchPoints},
-        screenWidth: ${screen.width},
-        screenHeight: ${screen.height},
-        availScreenWidth: ${screen.availWidth},
-        availScreenHeight: ${screen.availHeight},
-        colorDepth: ${screen.colorDepth},
-        pixelDepth: ${screen.pixelDepth},
-        timeZone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}
+        User Agent: ${navigator.userAgent},
+        App Name: ${navigator.appName},
+        App Version: ${navigator.appVersion},
+        Platform/OS: ${navigator.platform},
+        Language: ${navigator.language},
+        User Languages: ${navigator.languages},
+        Cookies Enabled: ${navigator.cookieEnabled},
+        Online Status: ${navigator.onLine},
+        CPU Cores (Approx.): ${navigator.hardwareConcurrency},
+        Device Memory (GB, Approx.): ${navigator.deviceMemory},
+        Max Touch Points: ${navigator.maxTouchPoints},
+        Screen Width: ${screen.width},
+        Screen Height: ${screen.height},
+        Available Screen Width: ${screen.availWidth},
+        Available Screen Height: ${screen.availHeight},
+        Color Depth: ${screen.colorDepth},
+        Pixel Depth: ${screen.pixelDepth},
+        Time Zone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}
     `);
 }
 
