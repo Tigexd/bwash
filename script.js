@@ -10,7 +10,7 @@ function changePageTitle() {
         };
     document.querySelector('title').textContent
         = newPageTitle;
-
+    }
 
         var input = document.getElementById('command-input');
 input.addEventListener("keypress", function(event) {
@@ -19,7 +19,6 @@ input.addEventListener("keypress", function(event) {
     document.getElementById("trigBtn").click();
   }
 });
-}
 
 
 
