@@ -2,9 +2,10 @@ const outputDiv = document.getElementById('output');
 const promptPrefix = document.getElementById('prompt-prefix');
 const cmdInput = document.getElementById('command-input');
 
-function dynamixTitle() {
-document.getElementById('dynamix').textContent = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$</span>`;
-};
+function changePageTitle() {
+    newPageTitle = 'The title has changed!';
+    document.title = newPageTitle;
+}
 
 // ==========================================
 // SILLY FILESYSTEM IMPLEMENTATION
