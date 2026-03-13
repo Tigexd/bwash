@@ -2,14 +2,23 @@ const outputDiv = document.getElementById('output');
 const promptPrefix = document.getElementById('prompt-prefix');
 const cmdInput = document.getElementById('command-input');
 
-
 function changePageTitle() {
+    newPageTitle = function changePageTitle() {
             newPageTitle = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$</span>`;
             document.querySelector('title').textContent
                 = newPageTitle;
-            document.querySelector('title').textContent
-                = newPageTitle;
-                
+        };
+    document.querySelector('title').textContent
+        = newPageTitle;
+
+
+        var input = document.getElementById('command-input');
+input.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("trigBtn").click();
+  }
+});
 }
 
 
@@ -275,8 +284,8 @@ usage: sudo -e [-ABkNnS] [-r role] [-t type] [-C num] [-D directory]
                         printLine(`bwash: ${cmdName}: Permission denied`);
                     } else {
                         cmd.execute(args);
-                        changePageTitle();
                         renderPrompt(); // update prompt thing because for safety
+                        dynamixTitle()
                     }
                 } else {
                     printLine(`bwash: ${cmdName}: command not found`);
