@@ -3,14 +3,19 @@ const promptPrefix = document.getElementById('prompt-prefix');
 const cmdInput = document.getElementById('command-input');
 
 function changePageTitle() {
-    newPageTitle = function changePageTitle() {
             newPageTitle = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$</span>`;
             document.querySelector('title').textContent
                 = newPageTitle;
-        };
-    document.querySelector('title').textContent
-        = newPageTitle;
-
+            document.querySelector('title').textContent
+                = newPageTitle;
+                
+        var input = document.getElementById('command-input');
+input.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("trigBtn").click();
+  }
+});
 }
 
 
