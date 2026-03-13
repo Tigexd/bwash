@@ -2,7 +2,9 @@ const outputDiv = document.getElementById('output');
 const promptPrefix = document.getElementById('prompt-prefix');
 const cmdInput = document.getElementById('command-input');
 
-
+function dynamixTitle() {
+document.getElementById('dynamix').textContent = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$</span>`;
+};
 
 // ==========================================
 // SILLY FILESYSTEM IMPLEMENTATION
@@ -67,7 +69,7 @@ function initUserSpace(user) {
 // ==========================================
 
 
-// Get device info function
+// get device info function
 function displayMaxDeviceInfo() {
 
 printLine(`Device and Browser Information Collected:
@@ -101,7 +103,7 @@ function getPromptPath() {
     return pathString === '/' ? '/' : pathString;
 }
 
-// Function to update the prompt
+// function to either create usr or display prompt thing
 function renderPrompt() {
     if (!username) {
         promptPrefix.textContent = "Create a username: ";
@@ -225,7 +227,7 @@ cmdInput.addEventListener('keydown', function (e) {
         } else {
 
             // ---------------------------------------------------------
-            // Echo the command to the output with the prompt prefix
+            // prompt thing + inputted command combined
             // ---------------------------------------------------------
 
             printLine(`${promptPrefix.innerHTML} ${val}`);
@@ -237,20 +239,15 @@ cmdInput.addEventListener('keydown', function (e) {
                 let cmdName = parts[0].toLowerCase();
                 let args = parts.slice(1);
 
-                // ===========================================
                 // SUDO CHRCKER
-                // ===========================================
+                
 
                 if (cmdName === 'sudo') {
                     isSudo = true;
                     cmdName = args[0] ? args[0].toLowerCase() : '';
                     args = args.slice(1);
                 }
-
-                // ===========================================
-                // EXECUTE LOGIC
-                // ===========================================
-
+                
                 if (cmdName === '') { // User just typed "sudo" with no command
                     printLine(`usage: sudo -h | -K | -k | -V
 usage: sudo -v [-ABkNnS] [-g group] [-h host] [-p prompt] [-u user]
@@ -270,7 +267,8 @@ usage: sudo -e [-ABkNnS] [-r role] [-t type] [-C num] [-D directory]
                         printLine(`bwash: ${cmdName}: Permission denied`);
                     } else {
                         cmd.execute(args);
-                        renderPrompt(); // Update prompt in case path changed
+                        renderPrompt(); // update prompt thing because for safety
+                        dynamixTitle()
                     }
                 } else {
                     printLine(`bwash: ${cmdName}: command not found`);
@@ -284,7 +282,7 @@ usage: sudo -e [-ABkNnS] [-r role] [-t type] [-C num] [-D directory]
     }
 });
 
-// Keep focus on the input
+// jump the page back to input place
 document.addEventListener('click', () => {
     cmdInput.focus();
 });
@@ -323,14 +321,14 @@ function getVisitorIP() {
     fetch('https://api.ipify.org/?format=json')
         .then(response => response.json())
         .then(data => {
-            // Update the HTML element with the fetched IP address
+            // Update the id with the fetched ip address (this will not auto display it, it will be printLine(d))
             document.getElementById('ip-ipv4').textContent = data.ip;
             document.getElementById('status-ipv4').textContent = ' OK ';
             document.getElementById('status-ipv4').style.color = 'var(--user-color)';
             document.getElementById('status-ipv4').style.fontWeight = 'bold';
         })
         .catch(error => {
-            // Handle any errors that may occur during the fetch operation
+            // cool error code
             console.error('Error fetching IP:', error);
             document.getElementById('ip-ipv4').textContent = 'Error fetching IP';
             document.getElementById('ip-ipv4').style.color = 'red';
@@ -350,14 +348,13 @@ function getVisitorIP() {
     fetch('https://api64.ipify.org/?format=json')
         .then(response => response.json())
         .then(data => {
-            // Update the HTML element with the fetched IP address
             document.getElementById('ip-ipv6').textContent = data.ip;
             document.getElementById('status-ipv6').textContent = ' OK ';
             document.getElementById('status-ipv6').style.color = 'var(--user-color)';
             document.getElementById('status-ipv6').style.fontWeight = 'bold';
         })
         .catch(error => {
-            // Handle any errors that may occur during the fetch operation
+            // cool error messages
             console.error('Error fetching IP:', error);
             document.getElementById('ip-ipv6').textContent = 'Error fetching IP';
             document.getElementById('ip-ipv6').style.color = 'red';
@@ -373,15 +370,15 @@ function getVisitorIP() {
 }
 
 
-// Call the function when the page loads
+// call the fetcher when the page is done loading
 document.addEventListener('DOMContentLoaded', getVisitorIP);
 
 
 if (!username) {
     printLine(`Establishing connection...`);
-    printLine(`Fetching Client IP...` + `<span id="ip-fetching" style="color: var(--user-color);">[IPv4 & IPv6]</span>`);
-    printLine("Client IPv4: " + `<span >[</span><span id="status-ipv4"> .. </span><span>] </span></span><span id="ip-ipv4" style="color: var(--user-color);">Fetching...</span>`);
-    printLine("Client IPv6: " + `<span >[</span><span id="status-ipv6"> .. </span><span>] </span></span><span id="ip-ipv6" style="color: var(--user-color);">Fetching...</span>`);
-    printLine(`<span>[</span><span style="color: var(--user-color); font-weight: bold;"> OK </span><span>] </span><span>Connection established.</span>`);
+    printLine(`Fetching user IP...` + `<span id="ip-fetching" style="color: var(--user-color);">[IPv4 & IPv6]</span>`);
+    printLine("User IPv4: " + `<span >[</span><span id="status-ipv4"> .. </span><span>] </span></span><span id="ip-ipv4" style="color: var(--user-color);">Fetching...</span>`);
+    printLine("User IPv6: " + `<span >[</span><span id="status-ipv6"> .. </span><span>] </span></span><span id="ip-ipv6" style="color: var(--user-color);">Fetching...</span>`);
+    printLine(`<span>[</span><span style="color: var(--user-color); font-weight: bold;"> OK </span><span>] </span><span>Connection established, even though fetching the IP was completely unecessary.</span>`);
     displayMaxDeviceInfo()
 }

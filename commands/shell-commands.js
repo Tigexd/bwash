@@ -1,7 +1,6 @@
-// Shell-level commands (separate from the core UI/system commands)
-// These are registered after script.js is loaded.
+// Shell-level commands, DONT add ANY core/upfront/UI commands like clear
 
-// NOTE: script.js must define `commands`, `currentPath`, and helpers like `getDirFromPath`, `renderPrompt`, `printLine`.
+// script.js: CANNOT REMOVE commands, currentPath, getDirFromPath, renderPrompt, printLine`.
 
 commands['echo'] = {
     level: 0,
