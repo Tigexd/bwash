@@ -11,15 +11,15 @@ function changePageTitle() {
     document.querySelector('title').textContent
         = newPageTitle;
 
+}
 
-        var input = document.getElementById('command-input');
+var input = document.getElementById('command-input');
 input.addEventListener("keypress", function(event) {
   if (event.key === "Enter") {
     event.preventDefault();
     document.getElementById("trigBtn").click();
   }
 });
-}
 
 
 
@@ -285,7 +285,6 @@ usage: sudo -e [-ABkNnS] [-r role] [-t type] [-C num] [-D directory]
                     } else {
                         cmd.execute(args);
                         renderPrompt(); // update prompt thing because for safety
-                        dynamixTitle()
                     }
                 } else {
                     printLine(`bwash: ${cmdName}: command not found`);
