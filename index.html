@@ -8,16 +8,12 @@
     <link rel="stylesheet" href="style.css">
 
 </head>
-<script>
-    let $pageTitle = username;
-document.title = $pageTitle;
-</script>
 
 <body>
 
     <main id="terminal">
         <div id="output"></div>
-        <button onclick="changePageTitle()">
+        <button id="trigBtn" style="display:none;" onclick="changePageTitle()">
             Change Page Title
         </button>
         <div class="input-line">
