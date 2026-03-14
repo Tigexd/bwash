@@ -5,6 +5,8 @@
     --user-color: #8ae234;
     --path-color: #79a7ec;
     --red: #bb0e0b;
+    --font-size: 14px;
+    --line-height: 17px;
 }
 
 body {
@@ -17,8 +19,7 @@ body {
     height: 100vh;
     box-sizing: border-box;
     overflow-x: hidden;
-    font-size: 14px;
-    line-height: 17px;
+
 }
 
 /* Forces the input to stay focused even if the user clicks around the page */
