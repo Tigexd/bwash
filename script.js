@@ -2,7 +2,6 @@ const outputDiv = document.getElementById('output');
 const promptPrefix = document.getElementById('prompt-prefix');
 const cmdInput = document.getElementById('command-input');
 
-
 var input = document.getElementById("command-input");
 input.addEventListener("keypress", function(event) {
   if (event.key === "Enter") {
@@ -16,10 +15,10 @@ input.addEventListener("keypress", function(event) {
 function changePageTitle() {
 
 newPageTitle = `mrow@bwash:~$`;
-            document.querySelector('button').textContent
+            document.querySelector('title').textContent
                 = newPageTitle;
         };
-        
+
 // ==========================================
 // SILLY FILESYSTEM IMPLEMENTATION
 // ==========================================
