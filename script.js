@@ -3,21 +3,21 @@ const promptPrefix = document.getElementById('prompt-prefix');
 const cmdInput = document.getElementById('command-input');
 
 var input = document.getElementById("command-input");
-input.addEventListener("keypress", function(event) {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    document.getElementById("trigBtn").click();
-  }
+input.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("trigBtn").click();
+    }
 });
 
 
 
 function changePageTitle() {
-
-newPageTitle = `${username}@bwash:${displayPath}$`;
-            document.querySelector('title').textContent
-                = newPageTitle;
-        };
+    if (!username) return;
+    const displayPath = getPromptPath();
+    const newPageTitle = `${username}@bwash:${displayPath}$`;
+    document.querySelector('title').textContent = newPageTitle;
+};
 
 // ==========================================
 // SILLY FILESYSTEM IMPLEMENTATION
@@ -85,7 +85,7 @@ function initUserSpace(user) {
 // get device info function
 function displayMaxDeviceInfo() {
 
-printLine(`Device and Browser Information Collected:
+    printLine(`Device and Browser Information Collected:
 User Agent: ${navigator.userAgent},
 App Name: ${navigator.appName},
 App Version: ${navigator.appVersion},
@@ -124,6 +124,7 @@ function renderPrompt() {
         const displayPath = getPromptPath();
         promptPrefix.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$</span>`;
     }
+    changePageTitle();
 }
 
 function printLine(htmlContent) {
@@ -253,14 +254,14 @@ cmdInput.addEventListener('keydown', function (e) {
                 let args = parts.slice(1);
 
                 // SUDO CHRCKER
-                
+
 
                 if (cmdName === 'sudo') {
                     isSudo = true;
                     cmdName = args[0] ? args[0].toLowerCase() : '';
                     args = args.slice(1);
                 }
-                
+
                 if (cmdName === '') { // User just typed "sudo" with no command
                     printLine(`usage: sudo -h | -K | -k | -V
 usage: sudo -v [-ABkNnS] [-g group] [-h host] [-p prompt] [-u user]
