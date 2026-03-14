@@ -14,7 +14,7 @@ input.addEventListener("keypress", function(event) {
 
 function changePageTitle() {
 
-newPageTitle = `mrow@bwash:~$`;
+newPageTitle = `<span class="user-host">${username}@bwash:${displayPath}$`;
             document.querySelector('title').textContent
                 = newPageTitle;
         };
