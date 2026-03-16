@@ -58,6 +58,11 @@ main {
     color: var(--text-main);
 }
 
+span {
+    margin:0px;
+    padding:0px;
+}
+
 input[type="text"] {
     background: transparent;
     border: none;
@@ -66,7 +71,6 @@ input[type="text"] {
     font-size: inherit;
     outline: none;
     margin-bottom: 1px;
-
     caret-color: var(--text-main);
     /* Makes the blinking cursor match */
 }
