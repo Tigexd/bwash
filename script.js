@@ -122,7 +122,7 @@ function renderPrompt() {
         promptPrefix.textContent = "Create a username: ";
     } else {
         const displayPath = getPromptPath();
-        promptPrefix.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$</span>`;
+        promptPrefix.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$&nbsp;</span>`;
     }
     changePageTitle();
 }
@@ -244,7 +244,7 @@ cmdInput.addEventListener('keydown', function (e) {
             // prompt thing + inputted command combined
             // ---------------------------------------------------------
 
-            printLine(`${promptPrefix.innerHTML} ${val}`);
+            printLine(`${promptPrefix.innerHTML}${val}`);
 
             if (val !== "") {
                 const parts = val.split(' ').filter(part => part.trim() !== '');
