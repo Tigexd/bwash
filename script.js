@@ -1,99 +1,16 @@
-// Initialize xterm
-const term = new Terminal({
-    theme: {
-        background: '#000000',
-        foreground: '#ffffff',
-        cursor: '#ffffff'
-    },
-    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-    fontSize: 14,
-    cursorBlink: true,
-    allowTransparency: true
-});
+const outputDiv = document.getElementById('output');
+const promptPrefix = document.getElementById('prompt-prefix');
+const cmdInput = document.getElementById('command-input');
 
-term.open(document.getElementById('terminal'));
-
-// Variables for input handling
-let currentInput = '';
-let awaitingUsername = true;
-
-// Handle data from xterm (user input)
-term.onData(data => {
-    if (awaitingUsername) {
-        if (data === '\r' || data === '\n') {
-            if (currentInput.trim()) {
-                username = currentInput.trim();
-                localStorage.setItem('terminal_user', username);
-                initUserSpace(username);
-                term.writeln(`Initializing environment for user: ${username}... done.`);
-                awaitingUsername = false;
-                currentInput = '';
-                renderPrompt();
-                changePageTitle();
-            }
-        } else if (data === '\x7f') { // Backspace
-            if (currentInput.length > 0) {
-                currentInput = currentInput.slice(0, -1);
-                term.write('\b \b'); // Erase last char
-            }
-        } else {
-            currentInput += data;
-            term.write(data);
-        }
-    } else {
-        if (data === '\r' || data === '\n') {
-            processCommand(currentInput.trim());
-            currentInput = '';
-        } else if (data === '\x7f') { // Backspace
-            if (currentInput.length > 0) {
-                currentInput = currentInput.slice(0, -1);
-                term.write('\b \b');
-            }
-        } else {
-            currentInput += data;
-            term.write(data);
-        }
+var input = document.getElementById("command-input");
+input.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("trigBtn").click();
     }
 });
 
-// Function to process commands
-function processCommand(val) {
-    if (val !== "") {
-        const parts = val.split(' ').filter(part => part.trim() !== '');
-        let isSudo = false;
-        let cmdName = parts[0].toLowerCase();
-        let args = parts.slice(1);
 
-        if (cmdName === 'sudo') {
-            isSudo = true;
-            cmdName = args[0] ? args[0].toLowerCase() : '';
-            args = args.slice(1);
-        }
-
-        if (cmdName === '') {
-            term.writeln(`usage: sudo -h | -K | -k | -V
-usage: sudo -v [-ABkNnS] [-g group] [-h host] [-p prompt] [-u user]
-usage: sudo -l [-ABkNnS] [-g group] [-h host] [-p prompt] [-U user]
-            [-u user] [command [arg ...]]
-usage: sudo -e [-ABkNnS] [-r role] [-t type] [-C num] [-D directory]
-            [-g group] [-h host] [-p prompt] [-R directory] [-T timeout]
-            [-u user] file ...`);
-        } else if (commands[cmdName]) {
-            const cmd = commands[cmdName];
-            if (cmd.level > 0 && !isSudo) {
-                term.writeln(`bwash: ${cmdName}: Permission denied`);
-            } else {
-                cmd.execute(args);
-                renderPrompt();
-                changePageTitle();
-            }
-        } else {
-            term.writeln(`bwash: ${cmdName}: command not found`);
-        }
-    } else {
-        renderPrompt();
-    }
-}
 
 function changePageTitle() {
     if (!username) return;
@@ -194,23 +111,26 @@ Time Zone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}
 function getPromptPath() {
     const pathString = '/' + currentPath.join('/');
     if (username && pathString === `/home/${username}`) {
-        return '~ ';
+        return '~';
     }
     return pathString === '/' ? '/' : pathString;
 }
 
-// function to render prompt in xterm
+// function to either create usr or display prompt thing
 function renderPrompt() {
     if (!username) {
-        term.write("Create a username: ");
+        promptPrefix.textContent = "Create a username: ";
     } else {
         const displayPath = getPromptPath();
-        term.write(`${username}@bwash:${displayPath}$ `);
+        promptPrefix.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$&nbsp;</span>`;
     }
+    changePageTitle();
 }
 
-function printLine(text) {
-    term.writeln(text);
+function printLine(htmlContent) {
+    const line = document.createElement('div');
+    line.innerHTML = htmlContent;
+    outputDiv.appendChild(line);
 }
 
 // ==========================================
@@ -279,7 +199,8 @@ const commands = {
                 currentPath = [];
                 outputDiv.innerHTML = '';
                 renderPrompt();
-                printLine(`<span style="font-weight: 600;">User deleted. Connection terminated.</span>`);
+                printLine("User deleted. Connection terminated.");
+                setTimeout(() => printLine("Create a username: "), 500);
             } else if (!args[0]) {
                 printLine(`userdel: missing operand`);
             } else {
@@ -300,18 +221,177 @@ const commands = {
 // ==========================================
 
 // handle enter
+cmdInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+        const val = this.value.trim();
 
+        if (!username) {
+
+            // ---------------------------------
+            // Handle initial login
+            // ---------------------------------
+
+            if (val) {
+                username = val;
+                localStorage.setItem('terminal_user', username);
+                initUserSpace(username); // Create their home folder
+                printLine(`Initializing environment for user: <span class="user-host">${username}</span>... done.`);
+                renderPrompt();
+            }
+        } else {
+
+            // ---------------------------------------------------------
+            // prompt thing + inputted command combined
+            // ---------------------------------------------------------
+
+            printLine(`${promptPrefix.innerHTML}${val}`);
+
+            if (val !== "") {
+                const parts = val.split(' ').filter(part => part.trim() !== '');
+
+                let isSudo = false;
+                let cmdName = parts[0].toLowerCase();
+                let args = parts.slice(1);
+
+                // SUDO CHRCKER
+
+
+                if (cmdName === 'sudo') {
+                    isSudo = true;
+                    cmdName = args[0] ? args[0].toLowerCase() : '';
+                    args = args.slice(1);
+                }
+
+                if (cmdName === '') { // User just typed "sudo" with no command
+                    printLine(`usage: sudo -h | -K | -k | -V
+usage: sudo -v [-ABkNnS] [-g group] [-h host] [-p prompt] [-u user]
+usage: sudo -l [-ABkNnS] [-g group] [-h host] [-p prompt] [-U user]
+            [-u user] [command [arg ...]]
+usage: sudo [-ABbEHkNnPS] [-r role] [-t type] [-C num] [-D directory]
+            [-g group] [-h host] [-p prompt] [-R directory] [-T timeout]
+            [-u user] [VAR=value] [-i | -s] [command [arg ...]]
+usage: sudo -e [-ABkNnS] [-r role] [-t type] [-C num] [-D directory]
+            [-g group] [-h host] [-p prompt] [-R directory] [-T timeout]
+            [-u user] file ...`);
+                } else if (commands[cmdName]) {
+                    const cmd = commands[cmdName];
+
+                    // Permission Check
+                    if (cmd.level > 0 && !isSudo) {
+                        printLine(`bwash: ${cmdName}: Permission denied`);
+                    } else {
+                        cmd.execute(args);
+                        renderPrompt(); // update prompt thing because for safety
+                    }
+                } else {
+                    printLine(`bwash: ${cmdName}: command not found`);
+                }
+            }
+        }
+
+        // Clear input and scroll to bottom
+        this.value = '';
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+});
 
 // jump the page back to input place
 document.addEventListener('click', () => {
-    term.focus();
+    cmdInput.focus();
 });
 
 // Init Sequence
 if (username) {
-    initUserSpace(username);
-    renderPrompt();
-    changePageTitle();
-} else {
-    renderPrompt();
+    initUserSpace(username); // Make sure their path is set on page reload
+}
+renderPrompt();
+
+
+// Silly IP fetcher
+function getVisitorIP() {
+    const timerId4 = setTimeout(() => {
+        console.error('Timeout fetching IP');
+        document.getElementById('ip-ipv4').textContent = 'Timeout fetching IP';
+        document.getElementById('ip-ipv4').style.color = 'red';
+        document.getElementById('status-ipv4').textContent = 'FAIL';
+        document.getElementById('status-ipv4').style.color = 'red';
+        printLine(`<span style="color: red;">Failed to fetch IPv4 address. This may be due to your network configuration or opening the page in a private browser window or being on a school network.</span>`);
+        failedFetch = true;
+    }, 3000);
+
+    const timerId6 = setTimeout(() => {
+        console.error('Timeout fetching IP');
+        document.getElementById('ip-ipv6').textContent = 'Timeout fetching IP';
+        document.getElementById('ip-ipv6').style.color = 'red';
+        document.getElementById('status-ipv6').textContent = 'FAIL';
+        document.getElementById('status-ipv6').style.color = 'red';
+        printLine(`<span style="color: red;">Failed to fetch IPv6 address. This may be due to your network configuration or opening the page in a private browser window or being on a school network.</span>`);
+        failedFetch = true;
+    }, 3000);
+
+    // ipv4 grabber
+
+    fetch('https://api.ipify.org/?format=json')
+        .then(response => response.json())
+        .then(data => {
+            // Update the id with the fetched ip address (this will not auto display it, it will be printLine(d))
+            document.getElementById('ip-ipv4').textContent = data.ip;
+            document.getElementById('status-ipv4').textContent = ' OK ';
+            document.getElementById('status-ipv4').style.color = 'var(--user-color)';
+            document.getElementById('status-ipv4').style.fontWeight = 'bold';
+        })
+        .catch(error => {
+            // cool error code
+            console.error('Error fetching IP:', error);
+            document.getElementById('ip-ipv4').textContent = 'Error fetching IP';
+            document.getElementById('ip-ipv4').style.color = 'red';
+            document.getElementById('status-ipv4').textContent = 'FAIL';
+            document.getElementById('status-ipv4').style.color = 'red';
+            printLine(`<span style="color: red;">Failed to fetch IPv4 address. This may be due to your network configuration or opening the page in a private browser window.</span>`);
+            failedFetch = true;
+        })
+        .finally(() => clearTimeout(timerId4))
+        ;
+
+    navigator.userAgentData.getHighEntropyValues(["platform", "platformVersion", "architecture", "model", "uaFullVersion"])
+
+
+    // ipv6 grabber
+
+    fetch('https://api64.ipify.org/?format=json')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('ip-ipv6').textContent = data.ip;
+            document.getElementById('status-ipv6').textContent = ' OK ';
+            document.getElementById('status-ipv6').style.color = 'var(--user-color)';
+            document.getElementById('status-ipv6').style.fontWeight = 'bold';
+        })
+        .catch(error => {
+            // cool error messages
+            console.error('Error fetching IP:', error);
+            document.getElementById('ip-ipv6').textContent = 'Error fetching IP';
+            document.getElementById('ip-ipv6').style.color = 'red';
+            document.getElementById('status-ipv6').textContent = 'FAIL';
+            document.getElementById('status-ipv6').style.color = 'red';
+            printLine(`<span style="color: red;">Failed to fetch IPv6 address. This may be due to your network configuration or opening the page in a private browser window.</span>`);
+            failedFetch = true;
+        })
+        .finally(() => clearTimeout(timerId6))
+        ;
+
+
+}
+
+
+// call the fetcher when the page is done loading
+document.addEventListener('DOMContentLoaded', getVisitorIP);
+
+
+if (!username) {
+    printLine(`Establishing connection...`);
+    printLine(`Fetching user IP...` + `<span id="ip-fetching" style="color: var(--user-color);">[IPv4 & IPv6]</span>`);
+    printLine("User IPv4: " + `<span >[</span><span id="status-ipv4"> .. </span><span>] </span></span><span id="ip-ipv4" style="color: var(--user-color);">Fetching...</span>`);
+    printLine("User IPv6: " + `<span >[</span><span id="status-ipv6"> .. </span><span>] </span></span><span id="ip-ipv6" style="color: var(--user-color);">Fetching...</span>`);
+    printLine(`<span>[</span><span style="color: var(--user-color); font-weight: bold;"> OK </span><span>] </span><span>Connection established, even though fetching the IP was completely unecessary.</span>`);
+    displayMaxDeviceInfo()
 }

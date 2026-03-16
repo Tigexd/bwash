@@ -5,27 +5,57 @@
     --user-color: #8ae234;
     --path-color: #79a7ec;
     --red: #bb0e0b;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-mono);
     margin: 0;
-    padding: 0;
+    font-size: 16px;
+    line-height: 1.5;
     height: 100vh;
-    overflow: hidden;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
-#terminal {
-    height: 100vh;
-    width: 100vw;
+/* Forces the input to stay focused even if the user clicks around the page */
+main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+#output {
+    white-space: pre-wrap;
+    /* Preserves spaces and line breaks */
+    word-wrap: break-word;
+}
+
+.input-line {
+    display: flex;
+    align-items: center;
+}
+
+#prompt-prefix {
+    white-space: pre;
+    font-weight: semi-bold;
+}
+
+/* Styling for the prompt components */
+.user-host {
+    color: var(--user-color);
+    font-weight: 600;
 }
 
 .path {
     color: var(--path-color);
-    font-weight: normal;
+    font-weight: bold;
 }
 
 .symbol {
-    color: var(--path-color);
+    color: var(--text-main);
 }
 
 span {
@@ -41,6 +71,7 @@ input[type="text"] {
     font-size: inherit;
     outline: none;
     margin-bottom: 1px;
+    margin-right: -1px;
     caret-color: var(--text-main);
     /* Makes the blinking cursor match */
 }
