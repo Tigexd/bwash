@@ -5,57 +5,27 @@
     --user-color: #8ae234;
     --path-color: #79a7ec;
     --red: #bb0e0b;
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 body {
-    background-color: var(--bg-color);
-    color: var(--text-main);
-    font-family: var(--font-mono);
     margin: 0;
-    font-size: 16px;
-    line-height: 1.5;
+    padding: 0;
     height: 100vh;
-    box-sizing: border-box;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
-/* Forces the input to stay focused even if the user clicks around the page */
-main {
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-}
-
-#output {
-    white-space: pre-wrap;
-    /* Preserves spaces and line breaks */
-    word-wrap: break-word;
-}
-
-.input-line {
-    display: flex;
-    align-items: center;
-}
-
-#prompt-prefix {
-    white-space: pre;
-    font-weight: semi-bold;
-}
-
-/* Styling for the prompt components */
-.user-host {
-    color: var(--user-color);
-    font-weight: 600;
+#terminal {
+    height: 100vh;
+    width: 100vw;
 }
 
 .path {
     color: var(--path-color);
-    font-weight: bold;
+    font-weight: normal;
 }
 
 .symbol {
-    color: var(--text-main);
+    color: var(--path-color);
 }
 
 span {
