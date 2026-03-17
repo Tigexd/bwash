@@ -11,6 +11,36 @@ input.addEventListener("keypress", function (event) {
 });
 
 
+function getUptime() {
+    if (!localStorage.getItem('siteVisitStart')) {
+        localStorage.setItem('siteVisitStart', Date.now());
+    }
+    const startTime = localStorage.getItem('siteVisitStart');
+    function updateTimer() {
+        const now = Date.now();
+        const diff = now - startTime; // Difference in milliseconds
+        // Convert ms to hrs, mins, secs
+        const seconds = Math.floor((diff / 1000) % 60);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const hours = Math.floor((diff / (1000 * 60 * 60)));
+
+        // Format as hrs:min:sec
+        const formattedTime =
+            String(hours).padStart(2, '0') + "hours, " +
+            String(minutes).padStart(2, '0') + "mins, " +
+            String(seconds).padStart(2, '0') + "sec";
+    }
+
+    localStorage.setItem("formattedTime", formattedTime);
+
+
+    uptime = formattedTime;
+    setInterval(updateTimer, 1000);
+    updateTimer(); // Initial call
+};
+
+getUptime();
+
 
 function changePageTitle() {
     if (!username) return;
