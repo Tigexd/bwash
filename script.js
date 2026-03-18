@@ -39,7 +39,17 @@ function getUptime() {
     updateTimer(); // Initial call
 };
 
-
+// Source - https://stackoverflow.com/a/950146
+// Posted by Bite code, modified by community. See post 'Timeline' for change history
+// Retrieved 2026-03-18, License - CC BY-SA 4.0     |
+//                                                  v
+function dynamicallyLoadScript(url) {
+    var script = document.createElement("script");  // create a script DOM node
+    script.src = url;  // set its src to the provided URL
+   
+    document.head.appendChild(script);  // add it to the end of the head section of the page (could change 'head' to 'body' to add it to the end of the body section instead)
+}
+// end :3
 
 function changePageTitle() {
     if (!username) return;
@@ -250,10 +260,16 @@ const commands = {
         }
     },
 
+    'spt': {
+        level: 1,
+        execute: (args) => {
+            dynamicallyLoadScript('commands/spt.js');
+        }
+    }
 
-    // shell level commands + filesystem commands (echo, pwd, ls, cd, bash) are in commands/shell-commands.js
+    // echo, pwd, ls, cd, bash are in commands/shell-commands.js
 
-    // program level commands (apt, systemctl, etc) will be in commands/program-commands.js
+    // spt, systemctl in commands/spt.js and whatever name i will choose.js
 
 };
 
@@ -268,9 +284,7 @@ cmdInput.addEventListener('keydown', function (e) {
 
         if (!username) {
 
-            // ---------------------------------
-            // Handle initial login
-            // ---------------------------------
+            // initial login
 
             if (val) {
                 username = val;
@@ -303,7 +317,7 @@ cmdInput.addEventListener('keydown', function (e) {
                     args = args.slice(1);
                 }
 
-                if (cmdName === '') { // User just typed "sudo" with no command
+                if (cmdName === '') {
                     printLine(`usage: sudo -h | -K | -k | -V
 usage: sudo -v [-ABkNnS] [-g group] [-h host] [-p prompt] [-u user]
 usage: sudo -l [-ABkNnS] [-g group] [-h host] [-p prompt] [-U user]
