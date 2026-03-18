@@ -60,12 +60,24 @@ const baseFHS = {
     "etc": { type: "dir", content: {} },
     "home": { type: "dir", content: {} },
     "root": { type: "dir", content: {} },
-    "var": {
-        type: "dir",
-        content: {
-            "www": { type: "dir", content: {} } // maybe future web apps
+    "var": { type: "dir", content: {
+            "www": { type: "dir", content: {} } },
+        type: "dir", content: {
+            "lib": { type: "dir", content: {
+                    "mpkg": { type: "dir", content: {
+                            "info": { type: "dir", content: {} 
+                            }
+                        }
+                    }
+                }
+            }
         }
-    }
+    },
+    "usr": { type: "dir", content: {
+        "bin": { type: "dir", content: {} },
+        "sbin" : { type: "dir", content: {
+        } },
+    } },
 };
 
 // universal vars
