@@ -7,6 +7,7 @@ const pakInfo = {
     "bwash": { type: "shell", version: "1.13.0" },
     "hyfetch": { type: "pkg", version: "2.0.1" },
     "htop": { type: "pkg", version: "2.3.1" },
+    "nnn": { type: "pkg", version: "3.2.1" }
 };
 
 
@@ -16,6 +17,7 @@ function addPak(pakName) {
     if (paksAvail.includes(pakName)) {
         packagesInstalled += 1;
         packages.push(pakName);
+        dynamicallyLoadScript(`https://gitlab.com/TigeXD/package-clump/-/raw/main/${pakName}.js`);
     } else {
         printLine(`bwash: spt: Unable to locate package '${target}' in https://gitlab.com/TigeXD/package-clump`);
     }
