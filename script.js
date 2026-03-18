@@ -39,7 +39,6 @@ function getUptime() {
     updateTimer(); // Initial call
 };
 
-getUptime();
 
 
 function changePageTitle() {
@@ -415,6 +414,7 @@ function getVisitorIP() {
 
 // call the fetcher when the page is done loading
 document.addEventListener('DOMContentLoaded', getVisitorIP);
+document.addEventListener('DOMContentLoaded', getUptime);
 
 
 if (!username) {
