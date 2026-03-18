@@ -6,12 +6,19 @@ function addPak(pakName) {
     if (paksAvail.includes(target)) {
         packagesInstalled += 1;
         packages.push(target);
+    } else {
+        printLine(`bwash: spt: Unable to locate package '${target}' in https://gitlab.com/TigeXD/package-clump`);
     }
-    
-    packages.push(pakName);
 }
 
 function delPak(pakName) {
+    if (packages.includes(target)) {
+        packagesInstalled -= 1;
+        packages.pop(target);
+    } else {
+        printLine(`bwash: spt: Unable to locate package '${target}' in `);
+    }
+    
     packagesInstalled -= 1;
     const packages = list.filter(item => item !== pakName);
 }
