@@ -46,7 +46,7 @@ function getUptime() {
 function dynamicallyLoadScript(url) {
     var script = document.createElement("script");  // create a script DOM node
     script.src = url;  // set its src to the provided URL
-   
+
     document.head.appendChild(script);  // add it to the end of the head section of the page (could change 'head' to 'body' to add it to the end of the body section instead)
 }
 // end :3
@@ -70,12 +70,17 @@ const baseFHS = {
     "etc": { type: "dir", content: {} },
     "home": { type: "dir", content: {} },
     "root": { type: "dir", content: {} },
-    "var": { type: "dir", content: {
-            "www": { type: "dir", content: {} } },
+    "var": {
         type: "dir", content: {
-            "lib": { type: "dir", content: {
-                    "mpkg": { type: "dir", content: {
-                            "info": { type: "dir", content: {} 
+            "www": { type: "dir", content: {} }
+        },
+        type: "dir", content: {
+            "lib": {
+                type: "dir", content: {
+                    "mpkg": {
+                        type: "dir", content: {
+                            "info": {
+                                type: "dir", content: {}
                             }
                         }
                     }
@@ -83,17 +88,21 @@ const baseFHS = {
             }
         }
     },
-    "usr": { type: "dir", content: {
-        "bin": { type: "dir", content: {} },
-        "sbin" : { type: "dir", content: {
-        } },
-    } },
+    "usr": {
+        type: "dir", content: {
+            "bin": { type: "dir", content: {} },
+            "sbin": {
+                type: "dir", content: {
+                }
+            },
+        }
+    },
 };
 
 // universal vars
 let username = localStorage.getItem('terminal_user');
 let fileSystem = JSON.parse(localStorage.getItem('bwash_fs'));
-let currentPath = []; // Array representing path. Empty array = '/'
+let currPath = []; // Array representing path. Empty array = '/'
 
 // initialize File System if it doesn't exist
 if (!fileSystem) {
@@ -108,15 +117,15 @@ function saveFS() {
 
 // dir path helper
 function getDirFromPath(pathArray) {
-    let current = fileSystem;
+    let currDir = fileSystem;
     for (let i = 0; i < pathArray.length; i++) {
-        if (current[pathArray[i]] && current[pathArray[i]].type === 'dir') {
-            current = current[pathArray[i]].content;
+        if (currDir[pathArray[i]] && currDir[pathArray[i]].type === 'dir') {
+            currDir = currDir[pathArray[i]].content;
         } else {
             return null; // Path invalid or is a file
         }
     }
-    return current;
+    return currDir;
 }
 
 // Setup user home dir on login
@@ -125,7 +134,7 @@ function initUserSpace(user) {
         fileSystem["home"].content[user] = { type: "dir", content: {} };
         saveFS();
     }
-    currentPath = ["home", user]; // Set default path to ~
+    currPath = ["home", user]; // Set default path to ~
 }
 
 // ==========================================
@@ -160,7 +169,7 @@ Time Zone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}
 
 // Calculate prompt path string
 function getPromptPath() {
-    const pathString = '/' + currentPath.join('/');
+    const pathString = '/' + currPath.join('/');
     if (username && pathString === `/home/${username}`) {
         return '~';
     }
@@ -247,7 +256,7 @@ const commands = {
             if (args[0] === username) {
                 localStorage.removeItem('terminal_user');
                 username = null;
-                currentPath = [];
+                currPath = [];
                 outputDiv.innerHTML = '';
                 renderPrompt();
                 printLine("User deleted. Connection terminated.");
