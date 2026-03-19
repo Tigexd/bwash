@@ -181,18 +181,18 @@ function getPromptPath() {
 // function to either create usr or display prompt thing
 function renderPrompt() {
     if (!username) {
-        setInlinePrompt("Create a username: ");
+        promptPrefix.textContent = "Create a username: ";
     } else {
         const displayPath = getPromptPath();
-        setInlinePrompt(`<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$&nbsp;</span>`);
+        promptPrefix.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$&nbsp;</span>`;
     }
     changePageTitle();
 }
 
 // printLine
-function printLine(text) {
+function printLine(htmlContent) {
     const line = document.createElement('div');
-    line.innerHTML = text;
+    line.innerHTML = htmlContent;
     outputDiv.appendChild(line);
 }
 
@@ -200,11 +200,6 @@ function printLine(text) {
 function cls() {
     outputDiv.innerHTML = '';
 }
-
-function setInlinePrompt(promptRaw) {
-    promptPrefix.textContent = promptRaw;
-}
-
 
 // ==========================================
 // COMMAND REGISTRY
@@ -270,7 +265,7 @@ const commands = {
                 localStorage.removeItem('terminal_user');
                 username = null;
                 currentPath = [];
-                cls();
+                outputDiv.innerHTML = '';
                 renderPrompt();
                 printLine("User deleted. Connection terminated.");
                 setTimeout(() => printLine("Create a username: "), 500);
