@@ -290,10 +290,6 @@ const commands = {
 
 };
 
-// ==========================================
-// HTML EVENT LISTENERS & INIT
-// ==========================================
-
 // handle enter
 cmdInput.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
