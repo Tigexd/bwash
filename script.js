@@ -56,7 +56,9 @@ function changePageTitle() {
     const displayPath = getPromptPath();
     const newPageTitle = `${username}@bwash:${displayPath}$`;
     document.querySelector('title').textContent = newPageTitle;
-};
+}
+
+
 
 // ==========================================
 // SILLY FILESYSTEM IMPLEMENTATION
@@ -179,19 +181,30 @@ function getPromptPath() {
 // function to either create usr or display prompt thing
 function renderPrompt() {
     if (!username) {
-        promptPrefix.textContent = "Create a username: ";
+        setInlinePrompt("Create a username: ");
     } else {
         const displayPath = getPromptPath();
-        promptPrefix.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$&nbsp;</span>`;
+        setInlinePrompt(`<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$&nbsp;</span>`);
     }
     changePageTitle();
 }
 
-function printLine(htmlContent) {
+// printLine
+function printLine(text) {
     const line = document.createElement('div');
-    line.innerHTML = htmlContent;
+    line.innerHTML = text;
     outputDiv.appendChild(line);
 }
+
+// cls
+function cls() {
+    outputDiv.innerHTML = '';
+}
+
+function setInlinePrompt(promptRaw) {
+    promptPrefix.textContent = promptRaw;
+}
+
 
 // ==========================================
 // COMMAND REGISTRY
@@ -219,7 +232,7 @@ const commands = {
     'clear': {
         level: 0,
         execute: (args) => {
-            outputDiv.innerHTML = '';
+            cls();
         }
     },
     'help': {
@@ -257,10 +270,9 @@ const commands = {
                 localStorage.removeItem('terminal_user');
                 username = null;
                 currentPath = [];
-                outputDiv.innerHTML = '';
-                renderPrompt();
+                cls();
                 printLine("User deleted. Connection terminated.");
-                setTimeout(() => printLine("Create a username: "), 500);
+                renderPrompt();
             } else if (!args[0]) {
                 printLine(`userdel: missing operand`);
             } else {
@@ -283,7 +295,7 @@ const commands = {
 };
 
 // ==========================================
-// HTML EVENT LISTENERS & INIT
+// HTML EVENT LISTENERS & INIT STUFF
 // ==========================================
 
 // handle enter
