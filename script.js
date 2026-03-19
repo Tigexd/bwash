@@ -83,9 +83,17 @@ function cls() {
     outputDiv.innerHTML = '';
 }
 
-// ==========================================
-// SILLY FILESYSTEM IMPLEMENTATION
-// ==========================================
+// taylored userdel
+function userdelInit() {
+    outputDiv.innerHTML = '';
+                renderPrompt();
+                printLine("User deleted. Connection terminated.");
+                setTimeout(() => printLine("Create a username: "), 500);
+}
+
+// =================================================================================================
+// stuff below this should remain the same as the one from original bwash, until another this
+// =================================================================================================
 
 // root dir FHS
 const baseFHS = {
@@ -254,6 +262,7 @@ const commands = {
         }
     },
 
+    
     // -----------------------------------------
     // Not basic argumentful commands
     // -----------------------------------------
@@ -265,10 +274,7 @@ const commands = {
                 localStorage.removeItem('terminal_user');
                 username = null;
                 currentPath = [];
-                outputDiv.innerHTML = '';
-                renderPrompt();
-                printLine("User deleted. Connection terminated.");
-                setTimeout(() => printLine("Create a username: "), 500);
+                userdelInit()
             } else if (!args[0]) {
                 printLine(`userdel: missing operand`);
             } else {
@@ -289,6 +295,10 @@ const commands = {
     // spt, systemctl in commands/spt.js and whatever name i will choose.js
 
 };
+
+// =================================================================================================
+// stuff above this should remain the same as the one from original bwash
+// =================================================================================================
 
 // handle enter
 cmdInput.addEventListener('keydown', function (e) {
