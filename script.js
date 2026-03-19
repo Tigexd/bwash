@@ -271,8 +271,9 @@ const commands = {
                 username = null;
                 currentPath = [];
                 cls();
-                printLine("User deleted. Connection terminated.");
                 renderPrompt();
+                printLine("User deleted. Connection terminated.");
+                setTimeout(() => printLine("Create a username: "), 500);
             } else if (!args[0]) {
                 printLine(`userdel: missing operand`);
             } else {
@@ -295,7 +296,7 @@ const commands = {
 };
 
 // ==========================================
-// HTML EVENT LISTENERS & INIT STUFF
+// HTML EVENT LISTENERS & INIT
 // ==========================================
 
 // handle enter
