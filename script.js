@@ -58,7 +58,30 @@ function changePageTitle() {
     document.querySelector('title').textContent = newPageTitle;
 }
 
+// Tayloring guh >:0
 
+// function to either create usr or display prompt thing
+function renderPrompt() {
+    if (!username) {
+        promptPrefix.textContent = "Create a username: ";
+    } else {
+        const displayPath = getPromptPath();
+        promptPrefix.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$&nbsp;</span>`;
+    }
+    changePageTitle();
+}
+
+// printLine
+function printLine(htmlContent) {
+    const line = document.createElement('div');
+    line.innerHTML = htmlContent;
+    outputDiv.appendChild(line);
+}
+
+// cls
+function cls() {
+    outputDiv.innerHTML = '';
+}
 
 // ==========================================
 // SILLY FILESYSTEM IMPLEMENTATION
@@ -176,29 +199,6 @@ function getPromptPath() {
         return '~';
     }
     return pathString === '/' ? '/' : pathString;
-}
-
-// function to either create usr or display prompt thing
-function renderPrompt() {
-    if (!username) {
-        promptPrefix.textContent = "Create a username: ";
-    } else {
-        const displayPath = getPromptPath();
-        promptPrefix.innerHTML = `<span class="user-host">${username}@bwash</span><span class="symbol">:</span><span class="path">${displayPath}</span><span class="symbol">$&nbsp;</span>`;
-    }
-    changePageTitle();
-}
-
-// printLine
-function printLine(htmlContent) {
-    const line = document.createElement('div');
-    line.innerHTML = htmlContent;
-    outputDiv.appendChild(line);
-}
-
-// cls
-function cls() {
-    outputDiv.innerHTML = '';
 }
 
 // ==========================================
