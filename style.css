@@ -73,8 +73,7 @@ input[type="text"] {
     margin-bottom: 1px;
     margin-right: -1px;
     caret-color: var(--text-main);
-    width:fit-content;
-    min-width: 100px;
+    width: 100%;
     /* Makes the blinking cursor match */
 }
 
