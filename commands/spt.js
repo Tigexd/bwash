@@ -10,7 +10,11 @@ const pakInfo = {
     "nnn": { type: "pkg", version: "3.2.1" }
 };
 
-
+function confirmation() {
+    const line = document.createElement('div');
+    line.innerHTML = "Continue? [Y/n] ";
+    outputDiv.appendChild(line);
+}
 
 
 function addPak(pakName) {
@@ -18,6 +22,20 @@ function addPak(pakName) {
         packagesInstalled += 1;
         packages.push(pakName);
         dynamicallyLoadScript(`https://gitlab.com/TigeXD/package-clump/-/raw/main/${pakName}.js`);
+        printLine(`Installing:
+  ${pakName}
+
+Installing dependencies:
+  ${pakNameDependencies}
+
+Suggested packages:
+  idek bro
+
+Summary:
+  Upgrading: 0, Installing: 1, Removing: 0, Not Upgrading: 0
+  Download size: 8,654 kB
+  Space needed: 43.5 MB / 8,659 MB available`);
+confirmation();
     } else {
         printLine(`bwash: spt: Unable to locate package '${target}' in https://gitlab.com/TigeXD/package-clump`);
     }
@@ -57,7 +75,7 @@ commands['spt'] = {
         } else if (action === 'update') { // just a localStorage refresher
             sptUpdate();
         } else if (action === 'upgrade') { // also just a fancy thingy
-        const target = args.join(' ');
+            const target = args.join(' ');
             sptUpgrade(target);
         } else if (action === 'remove') {
             delPak(target);
