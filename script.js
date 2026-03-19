@@ -102,7 +102,7 @@ const baseFHS = {
 // universal vars
 let username = localStorage.getItem('terminal_user');
 let fileSystem = JSON.parse(localStorage.getItem('bwash_fs'));
-let currPath = []; // Array representing path. Empty array = '/'
+let currentPath = []; // Array representing path. Empty array = '/'
 
 // initialize File System if it doesn't exist
 if (!fileSystem) {
@@ -117,15 +117,15 @@ function saveFS() {
 
 // dir path helper
 function getDirFromPath(pathArray) {
-    let currDir = fileSystem;
+    let current = fileSystem;
     for (let i = 0; i < pathArray.length; i++) {
-        if (currDir[pathArray[i]] && currDir[pathArray[i]].type === 'dir') {
-            currDir = currDir[pathArray[i]].content;
+        if (current[pathArray[i]] && current[pathArray[i]].type === 'dir') {
+            current = current[pathArray[i]].content;
         } else {
             return null; // Path invalid or is a file
         }
     }
-    return currDir;
+    return current;
 }
 
 // Setup user home dir on login
@@ -134,7 +134,7 @@ function initUserSpace(user) {
         fileSystem["home"].content[user] = { type: "dir", content: {} };
         saveFS();
     }
-    currPath = ["home", user]; // Set default path to ~
+    currentPath = ["home", user]; // Set default path to ~
 }
 
 // ==========================================
@@ -169,7 +169,7 @@ Time Zone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}
 
 // Calculate prompt path string
 function getPromptPath() {
-    const pathString = '/' + currPath.join('/');
+    const pathString = '/' + currentPath.join('/');
     if (username && pathString === `/home/${username}`) {
         return '~';
     }
@@ -256,7 +256,7 @@ const commands = {
             if (args[0] === username) {
                 localStorage.removeItem('terminal_user');
                 username = null;
-                currPath = [];
+                currentPath = [];
                 outputDiv.innerHTML = '';
                 renderPrompt();
                 printLine("User deleted. Connection terminated.");
