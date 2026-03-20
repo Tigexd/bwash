@@ -294,95 +294,6 @@ const commands = {
 
 };
 
-// =================================================================================================
-// stuff above this should remain the same as the one from original bwash
-// =================================================================================================
-
-// handle enter
-cmdInput.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') {
-        const val = this.value.trim();
-
-        if (!username) {
-
-            // initial login
-
-            if (val) {
-                username = val;
-                localStorage.setItem('terminal_user', username);
-                initUserSpace(username); // Create their home folder
-                printLine(`Initializing environment for user: <span class="user-host">${username}</span>... done.`);
-                renderPrompt();
-            }
-        } else {
-
-            // ---------------------------------------------------------
-            // prompt thing + inputted command combined
-            // ---------------------------------------------------------
-
-            printLine(`${promptPrefix.innerHTML}${val}`);
-
-            if (val !== "") {
-                const parts = val.split(' ').filter(part => part.trim() !== '');
-
-                let isSudo = false;
-                let cmdName = parts[0].toLowerCase();
-                let args = parts.slice(1);
-
-                // SUDO CHRCKER
-
-
-                if (cmdName === 'sudo') {
-                    isSudo = true;
-                    cmdName = args[0] ? args[0].toLowerCase() : '';
-                    args = args.slice(1);
-                }
-
-                if (cmdName === '') {
-                    printLine(`usage: sudo -h | -K | -k | -V
-usage: sudo -v [-ABkNnS] [-g group] [-h host] [-p prompt] [-u user]
-usage: sudo -l [-ABkNnS] [-g group] [-h host] [-p prompt] [-U user]
-            [-u user] [command [arg ...]]
-usage: sudo [-ABbEHkNnPS] [-r role] [-t type] [-C num] [-D directory]
-            [-g group] [-h host] [-p prompt] [-R directory] [-T timeout]
-            [-u user] [VAR=value] [-i | -s] [command [arg ...]]
-usage: sudo -e [-ABkNnS] [-r role] [-t type] [-C num] [-D directory]
-            [-g group] [-h host] [-p prompt] [-R directory] [-T timeout]
-            [-u user] file ...`);
-                } else if (commands[cmdName]) {
-                    const cmd = commands[cmdName];
-
-                    // Permission Check
-                    if (cmd.level > 0 && !isSudo) {
-                        printLine(`bwash: ${cmdName}: Permission denied`);
-                    } else {
-                        cmd.execute(args);
-                        renderPrompt(); // update prompt thing because for safety
-                    }
-                } else {
-                    printLine(`bwash: ${cmdName}: command not found`);
-                }
-            }
-        }
-
-        // Clear input and scroll to bottom
-        this.value = '';
-        window.scrollTo(0, document.body.scrollHeight);
-    }
-});
-
-// jump the page back to input place
-document.addEventListener('click', () => {
-    cmdInput.focus();
-});
-
-// Init Sequence
-if (username) {
-    initUserSpace(username); // Make sure their path is set on page reload
-}
-renderPrompt();
-
-
 // Silly IP fetcher
 function getVisitorIP() {
     const timerId4 = setTimeout(() => {
@@ -472,3 +383,91 @@ if (!username) {
     printLine(`<span>[</span><span style="color: var(--user-color); font-weight: bold;"> OK </span><span>] </span><span>Connection established, even though fetching the IP was completely unecessary.</span>`);
     displayMaxDeviceInfo()
 }
+
+// =================================================================================================
+// stuff above this should remain the same as the one from original bwash
+// =================================================================================================
+
+// handle enter
+cmdInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+        const val = this.value.trim();
+
+        if (!username) {
+
+            // initial login
+
+            if (val) {
+                username = val;
+                localStorage.setItem('terminal_user', username);
+                initUserSpace(username); // Create their home folder
+                printLine(`Initializing environment for user: <span class="user-host">${username}</span>... done.`);
+                renderPrompt();
+            }
+        } else {
+
+            // ---------------------------------------------------------
+            // prompt thing + inputted command combined
+            // ---------------------------------------------------------
+
+            printLine(`${promptPrefix.innerHTML}${val}`);
+
+            if (val !== "") {
+                const parts = val.split(' ').filter(part => part.trim() !== '');
+
+                let isSudo = false;
+                let cmdName = parts[0].toLowerCase();
+                let args = parts.slice(1);
+
+                // SUDO CHRCKER
+
+
+                if (cmdName === 'sudo') {
+                    isSudo = true;
+                    cmdName = args[0] ? args[0].toLowerCase() : '';
+                    args = args.slice(1);
+                }
+
+                if (cmdName === '') {
+                    printLine(`usage: sudo -h | -K | -k | -V
+usage: sudo -v [-ABkNnS] [-g group] [-h host] [-p prompt] [-u user]
+usage: sudo -l [-ABkNnS] [-g group] [-h host] [-p prompt] [-U user]
+            [-u user] [command [arg ...]]
+usage: sudo [-ABbEHkNnPS] [-r role] [-t type] [-C num] [-D directory]
+            [-g group] [-h host] [-p prompt] [-R directory] [-T timeout]
+            [-u user] [VAR=value] [-i | -s] [command [arg ...]]
+usage: sudo -e [-ABkNnS] [-r role] [-t type] [-C num] [-D directory]
+            [-g group] [-h host] [-p prompt] [-R directory] [-T timeout]
+            [-u user] file ...`);
+                } else if (commands[cmdName]) {
+                    const cmd = commands[cmdName];
+
+                    // Permission Check
+                    if (cmd.level > 0 && !isSudo) {
+                        printLine(`bwash: ${cmdName}: Permission denied`);
+                    } else {
+                        cmd.execute(args);
+                        renderPrompt(); // update prompt thing because for safety
+                    }
+                } else {
+                    printLine(`bwash: ${cmdName}: command not found`);
+                }
+            }
+        }
+
+        // Clear input and scroll to bottom
+        this.value = '';
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+});
+
+// jump the page back to input place
+document.addEventListener('click', () => {
+    cmdInput.focus();
+});
+
+// Init Sequence
+if (username) {
+    initUserSpace(username); // Make sure their path is set on page reload
+}
+renderPrompt();
