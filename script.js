@@ -10,35 +10,6 @@ input.addEventListener("keypress", function (event) {
     }
 });
 
-
-function getUptime() {
-    if (!localStorage.getItem('siteVisitStart')) {
-        localStorage.setItem('siteVisitStart', Date.now());
-    }
-    const startTime = localStorage.getItem('siteVisitStart');
-    function updateTimer() {
-        const now = Date.now();
-        const diff = now - startTime; // Difference in milliseconds
-        // Convert ms to hrs, mins, secs
-        const seconds = Math.floor((diff / 1000) % 60);
-        const minutes = Math.floor((diff / (1000 * 60)) % 60);
-        const hours = Math.floor((diff / (1000 * 60 * 60)));
-
-        // Format as hrs:min:sec
-        const formattedTime =
-            String(hours).padStart(2, '0') + "hours, " +
-            String(minutes).padStart(2, '0') + "mins, " +
-            String(seconds).padStart(2, '0') + "sec";
-    }
-
-    localStorage.setItem("formattedTime", formattedTime);
-
-
-    uptime = formattedTime;
-    setInterval(updateTimer, 1000);
-    updateTimer(); // Initial call
-};
-
 // Source - https://stackoverflow.com/a/950146
 // Posted by Bite code, modified by community. See post 'Timeline' for change history
 // Retrieved 2026-03-18, License - CC BY-SA 4.0     |
@@ -94,6 +65,34 @@ function userdelInit() {
 // =================================================================================================
 // stuff below this should remain the same as the one from original bwash, until another this
 // =================================================================================================
+
+function getUptime() {
+    if (!localStorage.getItem('siteVisitStart')) {
+        localStorage.setItem('siteVisitStart', Date.now());
+    }
+    const startTime = localStorage.getItem('siteVisitStart');
+    function updateTimer() {
+        const now = Date.now();
+        const diff = now - startTime; // Difference in milliseconds
+        // Convert ms to hrs, mins, secs
+        const seconds = Math.floor((diff / 1000) % 60);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const hours = Math.floor((diff / (1000 * 60 * 60)));
+
+        // Format as hrs:min:sec
+        const formattedTime =
+            String(hours).padStart(2, '0') + "hours, " +
+            String(minutes).padStart(2, '0') + "mins, " +
+            String(seconds).padStart(2, '0') + "sec";
+    }
+
+    localStorage.setItem("formattedTime", formattedTime);
+
+
+    uptime = formattedTime;
+    setInterval(updateTimer, 1000);
+    updateTimer(); // Initial call
+};
 
 // root dir FHS
 const baseFHS = {
@@ -262,7 +261,6 @@ const commands = {
         }
     },
 
-    
     // -----------------------------------------
     // Not basic argumentful commands
     // -----------------------------------------
