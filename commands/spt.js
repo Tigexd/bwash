@@ -89,8 +89,8 @@ commands['spt'] = {
     level: 1,
     execute: (args) => {
         const action = args.join(' ');
-        if (action === 'install') {
-            const target = args.join(' ');
+        if (action.includes('install')) {
+            const target = args.join(' ')[1];
             addPak(target);
         } else if (action === 'update') { // just a localStorage refresher
             sptUpdate();
