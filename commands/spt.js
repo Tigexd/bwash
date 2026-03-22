@@ -34,8 +34,6 @@ function confirmation() {
 function addPak(pakName) {
     if (paksAvail.includes(paks)) {
         packagesInstalled += 1;
-        packages.push(pakName);
-        dynamicallyLoadScript(`https://gitlab.com/TigeXD/package-clump/-/raw/main/${pakName}.js`);
         printLine(`Installing:
   ${pakName}
 
