@@ -32,7 +32,7 @@ function confirmation() {
 
 
 function addPak(pakName) {
-    if (paksAvail.includes(paks)) {
+    if (paks.includes(pakName)) {
         packagesInstalled += 1;
         printLine(`Installing:
   ${pakName}
