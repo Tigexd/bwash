@@ -2,13 +2,7 @@ let packagesInstalled = 2;
 let packages = ["bwash", "sudo"];
 const paksAvail = ["hyfetch", "htop"];
 
-const pakInfo = {
-    "sudo": { type: "pkg", version: "1.1.13.p2" },
-    "bwash": { type: "shell", version: "1.13.0" },
-    "hyfetch": { type: "pkg", version: "2.0.1" },
-    "htop": { type: "pkg", version: "2.3.1" },
-    "nnn": { type: "pkg", version: "3.2.1" }
-};
+const paks = ["sudo", "bwash", "hyfetch", "htop", "nnn"];
 
 fetch('https://gitlab.com/TigeXD/package-clump/-/raw/main/list.json?ref_type=heads') // Replace './data.json' with your file path or API URL
     .then(response => {
@@ -38,7 +32,7 @@ function confirmation() {
 
 
 function addPak(pakName) {
-    if (paksAvail.includes(pakName)) {
+    if (paksAvail.includes(paks)) {
         packagesInstalled += 1;
         packages.push(pakName);
         dynamicallyLoadScript(`https://gitlab.com/TigeXD/package-clump/-/raw/main/${pakName}.js`);
@@ -90,8 +84,10 @@ commands['spt'] = {
     execute: (args) => {
         const action = args.join(' ');
         if (action.includes('install')) {
-            const target = args.join(' ')[1];
+        const target = args.join(' ')[1];
             addPak(target);
+
+
         } else if (action === 'update') { // just a localStorage refresher
             sptUpdate();
         } else if (action === 'upgrade') { // also just a fancy thingy
