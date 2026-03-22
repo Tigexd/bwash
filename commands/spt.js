@@ -31,9 +31,8 @@ function confirmation() {
 }
 
 
-function addPak(pakName) {
-    if (paks.includes(pakName)) {
-        packagesInstalled += 1;
+function addPak(target) {
+    if (paks.includes(target)) {
         printLine(`Installing:
   ${pakName}
 
@@ -53,16 +52,16 @@ Summary:
     }
 }
 
-function delPak(pakName) {
-    if (packages.includes(pakName)) {
+function delPak(target) {
+    if (packages.includes(target)) {
         packagesInstalled -= 1;
-        packages.pop(pakName);
+        packages.pop(target);
     } else {
         printLine(`bwash: spt: Unable to locate package '${target}' in /user/bin`);
     }
 
     packagesInstalled -= 1;
-    const packages = list.filter(item => item !== pakName);
+    const packages = list.filter(item => item !== target);
 }
 
 function sptUpdate() {
@@ -81,10 +80,9 @@ commands['spt'] = {
     level: 1,
     execute: (args) => {
         const action = args.join(' ');
-        if (action.includes('install')) {
+        if (action === 'install') {
         const target = args.join(' ')[1];
             addPak(target);
-
 
         } else if (action === 'update') { // just a localStorage refresher
             sptUpdate();
