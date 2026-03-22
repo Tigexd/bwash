@@ -79,9 +79,9 @@ function sptUpgrade(pakName) {
 commands['spt'] = {
     level: 1,
     execute: (args) => {
-        const action = args.join(' ');
+        const action = args.join(' ')[1];
         if (action === 'install') {
-        const target = args.join(' ')[1];
+        const target = args.join(' ')[2];
             addPak(target);
 
         } else if (action === 'update') { // just a localStorage refresher
