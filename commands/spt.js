@@ -4,6 +4,14 @@ const paksAvail = ["hyfetch", "htop"];
 
 const paks = ["sudo", "bwash", "hyfetch", "htop", "nnn"];
 
+
+function printLine(htmlContent) {
+  const line = document.createElement('div');
+  line.innerHTML = htmlContent;
+  outputDiv.appendChild(line);
+}
+
+
 function confirmation() {
   const line = document.createElement("div");
   line.innerHTML = "Continue? [Y/n] ";
