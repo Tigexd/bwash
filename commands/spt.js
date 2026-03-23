@@ -17,7 +17,8 @@ function addPak(target) {
   }
   if (target === "hyfetch") {
     printLine(
-      `Installing: ${target}
+      `Installing:
+        ${target}
 
 Installing dependencies:
   dependencies
