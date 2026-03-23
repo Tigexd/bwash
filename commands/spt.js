@@ -80,22 +80,28 @@ function sptUpgrade(pakName) {
   }
 }
 
-commands["spt"] = {
+commands["spt"] = { 
   level: 1,
   execute: (args) => {
-    const action = args.join(" ");
+    const action = args[0];          // "install"
+    const target = args[1];          // "hyfetch"
+
     if (action === "install") {
-      const target = args.slice[3];
+      if (!target) {
+        printLine("bwash: spt: no package specified.");
+        return;
+      }
       addPak(target);
+
     } else if (action === "update") {
-      // just a localStorage refresher
       sptUpdate();
+
     } else if (action === "upgrade") {
-      // also just a fancy thingy
-      const target = args.join(" ");
       sptUpgrade(target);
+
     } else if (action === "remove") {
       delPak(target);
+
     } else {
       printLine(`bwash: spt: '${action}' not found.`);
     }
