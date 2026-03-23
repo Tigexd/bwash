@@ -18,7 +18,7 @@ function addPak(target) {
   if (paks.includes(target)) {
     printLine(
       `Installing:
-        ${target}
+  ${target}
 
 Installing dependencies:
   dependencies
