@@ -16,7 +16,20 @@ function addPak(target) {
     return;
   }
   if (target === "hyfetch") {
-    printLine(`Installing: ${target}`);
+    printLine(
+      `Installing: ${target}
+
+Installing dependencies:
+  ${pakNameDependencies}
+
+Suggested packages:
+  idek bro
+
+Summary:
+  Upgrading: 0, Installing: 1, Removing: 0, Not Upgrading: 0
+  Download size: 8,654 kB
+  Space needed: 43.5 MB / 8,659 MB available`
+    );
   } else {
     printLine(
       `bwash: spt: Unable to locate package '${target}' in https://gitlab.com/TigeXD/package-clump`
