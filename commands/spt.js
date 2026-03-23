@@ -4,13 +4,11 @@ const paksAvail = ["hyfetch", "htop"];
 
 const paks = ["sudo", "bwash", "hyfetch", "htop", "nnn"];
 
-
 function printLine(htmlContent) {
-  const line = document.createElement('div');
+  const line = document.createElement("div");
   line.innerHTML = htmlContent;
   outputDiv.appendChild(line);
 }
-
 
 function confirmation() {
   const line = document.createElement("div");
@@ -19,9 +17,13 @@ function confirmation() {
 }
 
 function addPak(target) {
+  if (!target) {
+    printLine("bwash: spt: no package specified.");
+    return;
+  }
   if (paks.includes(target)) {
     printLine(`Installing:
-  ${pakName}
+  ${target}
 
 Installing dependencies:
   ${pakNameDependencies}
@@ -67,11 +69,11 @@ function sptUpgrade(pakName) {
   }
 }
 
-commands["spt"] = { 
+commands["spt"] = {
   level: 1,
   execute: (args) => {
-    const action = args[0];          // "install"
-    const target = args[1];          // "hyfetch"
+    const action = args[0]; // "install"
+    const target = args[1]; // "hyfetch"
 
     if (action === "install") {
       if (!target) {
@@ -79,16 +81,12 @@ commands["spt"] = {
         return;
       }
       addPak(target);
-
     } else if (action === "update") {
       sptUpdate();
-
     } else if (action === "upgrade") {
       sptUpgrade(target);
-
     } else if (action === "remove") {
       delPak(target);
-
     } else {
       printLine(`bwash: spt: '${action}' not found.`);
     }
