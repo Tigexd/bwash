@@ -20,7 +20,7 @@ function addPak(target) {
       `Installing: ${target}
 
 Installing dependencies:
-  ${pakNameDependencies}
+  dependencies
 
 Suggested packages:
   idek bro
