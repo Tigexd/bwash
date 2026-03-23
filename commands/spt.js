@@ -6,7 +6,7 @@ const paks = ["sudo", "bwash", "hyfetch", "htop", "nnn"];
 
 function confirmation() {
   const line = document.createElement("div");
-  line.innerHTML = "Continue? [Y/n] ";
+  line.textContent = "Continue? [Y/n] ";
   outputDiv.appendChild(line);
   if (args[0] === "y" || args[0] === "Y") {
     printLine('OK');
