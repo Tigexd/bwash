@@ -21,7 +21,7 @@ function addPak(target) {
     printLine("bwash: spt: no package specified.");
     return;
   }
-  if (paks.includes(target)) {
+  if (target === "hyfetch") {
     printLine(`Installing:
   ${target}
 
