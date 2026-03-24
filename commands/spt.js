@@ -43,7 +43,7 @@ Summary:
   Space needed: 43.5 MB / 8,659 MB available`
     );
     confirmation();
-    dynamicallyLoadScript(packages/hyfetch.js); // for the sake of demo for now
+    dynamicallyLoadScript('packages/hyfetch.js'); // for the sake of demo for now
   } else {
     printLine(
       `bwash: spt: Unable to locate package '${target}' in https://gitlab.com/TigeXD/package-clump`
