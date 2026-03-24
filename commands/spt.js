@@ -6,8 +6,8 @@ const paks = ["sudo", "bwash", "hyfetch", "htop", "nnn"];
 
 function confirmation() {
   requestConfirmation("Continue? [Y/n] ", (answer) => {
-    const normAns = answer.trim().toLowerCase();
-    if (normAns === "" || normAns === "y" || normAns === "yes") {
+    const normalized = answer.trim().toLowerCase();
+    if (normalized === "" || normalized === "y" || normalized === "yes") {
       printLine("OK");
     } else {
       printLine("Aborted.");
