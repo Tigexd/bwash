@@ -9,7 +9,7 @@ function confirmation() {
     const normalized = answer.trim().toLowerCase();
     if (normalized === "" || normalized === "y" || normalized === "yes") {
       printLine("OK");
-      dynamicallyLoadScript(target);
+      return;
     } else {
       printLine("Aborted.");
     }
@@ -18,6 +18,7 @@ function confirmation() {
 
 function fetchScrpit(target) {
   dynamicallyLoadScript("https://gitlab.com/TigeXD/package-clump/-/raw/main/"+target+".js?ref_type=heads");
+  return;
 }
 
 function addPak(target) {
@@ -42,6 +43,7 @@ Summary:
   Space needed: 43.5 MB / 8,659 MB available`
     );
     confirmation();
+    dynamicallyLoadScript(target);
   } else {
     printLine(
       `bwash: spt: Unable to locate package '${target}' in https://gitlab.com/TigeXD/package-clump`
