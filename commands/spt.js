@@ -17,7 +17,7 @@ function confirmation() {
 }
 
 function fetchScrpit(target) {
-  dynamicallyLoadScript(`https://gitlab.com/TigeXD/package-clump/-/raw/main/${target}.js?ref_type=heads`);
+  dynamicallyLoadScript("https://gitlab.com/TigeXD/package-clump/-/raw/main/"+target+".js?ref_type=heads");
 }
 
 function addPak(target) {
