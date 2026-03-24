@@ -2,6 +2,9 @@ const outputDiv = document.getElementById('output');
 const promptPrefix = document.getElementById('prompt-prefix');
 const cmdInput = document.getElementById('command-input');
 
+let pendingConfirm = null;
+let pendingConfirmPrompt = null;
+
 var input = document.getElementById("command-input");
 input.addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
@@ -33,6 +36,11 @@ function changePageTitle() {
 
 // function to either create usr or display prompt thing
 function renderPrompt() {
+    if (pendingConfirmPrompt) {
+        promptPrefix.innerHTML = pendingConfirmPrompt;
+        changePageTitle();
+        return;
+    }
     if (!username) {
         promptPrefix.textContent = "Create a username: ";
     } else {
@@ -47,6 +55,12 @@ function printLine(htmlContent) {
     const line = document.createElement('div');
     line.innerHTML = htmlContent;
     outputDiv.appendChild(line);
+}
+
+function requestConfirmation(promptText, onAnswer) {
+    pendingConfirm = onAnswer;
+    pendingConfirmPrompt = promptText;
+    renderPrompt();
 }
 
 // cls
@@ -412,6 +426,20 @@ cmdInput.addEventListener('keydown', function (e) {
 
             printLine(`${promptPrefix.innerHTML}${val}`);
 
+            if (pendingConfirm) {
+                const handler = pendingConfirm;
+                const answer = val;
+                pendingConfirm = null;
+                pendingConfirmPrompt = null;
+                handler(answer);
+                if (!pendingConfirm) {
+                    renderPrompt();
+                }
+                this.value = '';
+                window.scrollTo(0, document.body.scrollHeight);
+                return;
+            }
+
             if (val !== "") {
                 const parts = val.split(' ').filter(part => part.trim() !== '');
 
@@ -447,7 +475,9 @@ usage: sudo -e [-ABkNnS] [-r role] [-t type] [-C num] [-D directory]
                         printLine(`bwash: ${cmdName}: Permission denied`);
                     } else {
                         cmd.execute(args);
-                        renderPrompt(); // update prompt thing because for safety
+                        if (!pendingConfirm) {
+                            renderPrompt(); // update prompt thing because for safety
+                        }
                     }
                 } else {
                     printLine(`bwash: ${cmdName}: command not found`);

@@ -5,11 +5,14 @@ const paksAvail = ["hyfetch", "htop"];
 const paks = ["sudo", "bwash", "hyfetch", "htop", "nnn"];
 
 function confirmation() {
-  const line = document.createElement("div");
-  promptPrefix.innerHTML = "Continue? [Y/n] ";
-  if (args[0] === "y" || args[0] === "Y") {
-    printLine('OK');
-  }
+  requestConfirmation("Continue? [Y/n] ", (answer) => {
+    const normalized = answer.trim().toLowerCase();
+    if (normalized === "" || normalized === "y" || normalized === "yes") {
+      printLine("OK");
+    } else {
+      printLine("Aborted.");
+    }
+  });
 }
 
 function addPak(target) {
