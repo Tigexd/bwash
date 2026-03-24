@@ -9,6 +9,7 @@ function confirmation() {
     const normalized = answer.trim().toLowerCase();
     if (normalized === "" || normalized === "y" || normalized === "yes") {
       printLine("OK");
+      dynamicallyLoadScript(target);
     } else {
       printLine("Aborted.");
     }
@@ -41,7 +42,6 @@ Summary:
   Space needed: 43.5 MB / 8,659 MB available`
     );
     confirmation();
-    fetchScript(target);
   } else {
     printLine(
       `bwash: spt: Unable to locate package '${target}' in https://gitlab.com/TigeXD/package-clump`
