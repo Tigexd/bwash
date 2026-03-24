@@ -6,13 +6,17 @@ const paks = ["sudo", "bwash", "hyfetch", "htop", "nnn"];
 
 function confirmation() {
   requestConfirmation("Continue? [Y/n] ", (answer) => {
-    const normalized = answer.trim().toLowerCase();
-    if (normalized === "" || normalized === "y" || normalized === "yes") {
+    const normAns = answer.trim().toLowerCase();
+    if (normAns === "" || normAns === "y" || normAns === "yes") {
       printLine("OK");
     } else {
       printLine("Aborted.");
     }
   });
+}
+
+function fetchScrpit(target) {
+  dynamicallyLoadScript(`https://gitlab.com/TigeXD/package-clump/-/raw/main/${target}.js?ref_type=heads`);
 }
 
 function addPak(target) {
@@ -37,6 +41,7 @@ Summary:
   Space needed: 43.5 MB / 8,659 MB available`
     );
     confirmation();
+    fetchScript(target);
   } else {
     printLine(
       `bwash: spt: Unable to locate package '${target}' in https://gitlab.com/TigeXD/package-clump`
