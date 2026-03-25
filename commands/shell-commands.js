@@ -18,29 +18,6 @@ commands['echo'] = {
     }
 };
 
-commands["hyfetch"] = {
-    level: 0,
-    execute: (args) => {
-        const action = args[0]; // "install"
-        if (!hyfetchConf) {
-            localStorage.setItem("hyfetchConfig");
-            if (!action || action === "-c" || action === "--config") {
-                initConfig();
-            }
-
-            addPak(target);
-        } else if (action === "update") {
-            sptUpdate();
-        } else if (action === "upgrade") {
-            sptUpgrade(target);
-        } else if (action === "remove") {
-            delPak(target);
-        } else {
-            printLine(`bwash: spt: '${action}' not found.`);
-        }
-    }
-};
-
 commands['pwd'] = {
     level: 0,
     execute: () => {
