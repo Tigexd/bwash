@@ -18,7 +18,7 @@ function confirmation() {
 
 function addpac(target) {
   const script = document.createElement('script'); // create.js in the html
-  script.src = `https://cdn.site.org/packages/${target}.js`;
+  script.src = `https://cdn.tigexd.org/spt%20packages/${target}.js`;
   script.async = true; // asyncing
   script.onload = () => console.log(`${target}.js loaded successfully`); // for cloudflare and for testing
   script.onerror = () => console.error(`Failed to load ${target}.js`);
