@@ -16,9 +16,13 @@ function confirmation() {
   });
 }
 
-function fetchScrpit(target) {
-  dynamicallyLoadScript("https://gitlab.com/TigeXD/package-clump/-/raw/main/"+target+".js?ref_type=heads");
-  return;
+function addpac(target) {
+  const script = document.createElement('script'); // create.js in the html
+  script.src = `https://cdn.site.org/packages/${target}.js`;
+  script.async = true; // asyncing
+  script.onload = () => console.log(`${target}.js loaded successfully`); // for cloudflare and for testing
+  script.onerror = () => console.error(`Failed to load ${target}.js`);
+  document.head.appendChild(script); // the real thingy
 }
 
 function addPak(target) {
@@ -43,7 +47,7 @@ Summary:
   Space needed: 43.5 MB / 8,659 MB available`
     );
     confirmation();
-    dynamicallyLoadScript('packages/hyfetch.js'); // for the sake of demo for now
+    addpac(target); // for the sake of demo for now
   } else {
     printLine(
       `bwash: spt: Unable to locate package '${target}' in https://gitlab.com/TigeXD/package-clump`

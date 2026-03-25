@@ -299,7 +299,6 @@ const commands = {
         level: 1,
         execute: (args) => {
             dynamicallyLoadScript('commands/spt.js');
-            dynamicallyLoadScript('packages/hyfetch.js'); // for the sake of demo for now
         }
     }
 
