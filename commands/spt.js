@@ -17,12 +17,26 @@ function confirmation() {
 }
 
 function addpac(target) {
-  const script = document.createElement('script'); // create.js in the html
-  script.src = `https://cdn.tigexd.org/spt%20packages/${target}.js`;
-  script.async = true; // asyncing
-  script.onload = () => printLine(`${target}.js loaded successfully`); // for cloudflare and for testing
-  script.onerror = () => printLine(`Failed to load ${target}.js`);
-  document.head.appendChild(script); // the real thingy
+  const cdnSrc = `https://cdn.tigexd.org/spt%20packages/${target}.js`;
+  const localSrc = `../package-clump/spt%20packages/${target}.js`;
+
+  const loadScript = (src, isFallback) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    script.onload = () => printLine(`${target}.js loaded successfully`);
+    script.onerror = () => {
+      if (!isFallback) {
+        loadScript(cdnSrc, true);
+        return;
+      }
+      printLine(`Failed to load ${target}.js`);
+    };
+    document.head.appendChild(script);
+  };
+
+  const useLocal = location.protocol === 'file:' || location.hostname === 'localhost';
+  loadScript(useLocal ? localSrc : cdnSrc, !useLocal);
 }
 
 function addPak(target) {
