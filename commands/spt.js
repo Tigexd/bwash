@@ -4,6 +4,8 @@ const paksAvail = ["hyfetch", "htop"];
 
 const paks = ["sudo", "bwash", "hyfetch", "htop", "nnn"];
 
+window.sptLoaded = true;
+
 function confirmation() {
   requestConfirmation("Continue? [Y/n] ", (answer) => {
     const normalized = answer.trim().toLowerCase();
@@ -118,3 +120,4 @@ commands["spt"] = {
     }
   },
 };
+
