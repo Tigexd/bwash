@@ -23,7 +23,7 @@ function addpac(target) {
   const localSrc = `../package-clump/spt%20packages/${target}.js`;
 
   const loadScript = (src, isFallback) => {
-    const script = document.createElement('script');
+    const script = document.createElement("script");
     script.src = src;
     script.async = true;
     script.onload = () => printLine(`${target}.js loaded successfully`);
@@ -37,7 +37,8 @@ function addpac(target) {
     document.head.appendChild(script);
   };
 
-  const useLocal = location.protocol === 'file:' || location.hostname === 'localhost';
+  const useLocal =
+    location.protocol === "file:" || location.hostname === "localhost";
   loadScript(useLocal ? localSrc : cdnSrc, !useLocal);
 }
 
@@ -100,24 +101,25 @@ function sptUpgrade(pakName) {
 commands["spt"] = {
   level: 1,
   execute: (args) => {
-    const action = args[0]; // "install"
-    const target = args[1]; // "hyfetch"
+    function spter() {
+      const action = args[0]; // "install"
+      const target = args[1]; // "hyfetch"
 
-    if (action === "install") {
-      if (!target) {
-        printLine("bwash: spt: no package specified.");
-        return;
+      if (action === "install") {
+        if (!target) {
+          printLine("bwash: spt: no package specified.");
+          return;
+        }
+        addPak(target);
+      } else if (action === "update") {
+        sptUpdate();
+      } else if (action === "upgrade") {
+        sptUpgrade(target);
+      } else if (action === "remove") {
+        delPak(target);
+      } else {
+        printLine(`bwash: spt: '${action}' not found.`);
       }
-      addPak(target);
-    } else if (action === "update") {
-      sptUpdate();
-    } else if (action === "upgrade") {
-      sptUpgrade(target);
-    } else if (action === "remove") {
-      delPak(target);
-    } else {
-      printLine(`bwash: spt: '${action}' not found.`);
     }
   },
 };
-
