@@ -19,11 +19,11 @@ function confirmation() {
 }
 
 function addpac(target) {
-  const cdnSrc = `https://cdn.tigexd.org/spt%20packages/${target}.js`;
+    const cdnSrc = `https://cdn.tigexd.org/spt%20packages/${target}.js`;
   const localSrc = `../package-clump/spt%20packages/${target}.js`;
 
   const loadScript = (src, isFallback) => {
-    const script = document.createElement("script");
+    const script = document.createElement('script');
     script.src = src;
     script.async = true;
     script.onload = () => printLine(`${target}.js loaded successfully`);
@@ -37,10 +37,10 @@ function addpac(target) {
     document.head.appendChild(script);
   };
 
-  const useLocal =
-    location.protocol === "file:" || location.hostname === "localhost";
+  const useLocal = location.protocol === 'file:' || location.hostname === 'localhost';
   loadScript(useLocal ? localSrc : cdnSrc, !useLocal);
 }
+
 
 function addPak(target) {
   if (!target) {
