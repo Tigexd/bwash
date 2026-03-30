@@ -23,7 +23,7 @@ function addpac(target) {
   const localSrc = `../package-clump/spt%20packages/${target}.js`;
 
   const loadScript = (src, isFallback) => {
-    const script = document.createElement("script");
+    const script = document.createElement('script');
     script.src = src;
     script.async = true;
     script.onload = () => printLine(`${target}.js loaded successfully`);
@@ -37,10 +37,10 @@ function addpac(target) {
     document.head.appendChild(script);
   };
 
-  const useLocal =
-    location.protocol === "file:" || location.hostname === "localhost";
+  const useLocal = location.protocol === 'file:' || location.hostname === 'localhost';
   loadScript(useLocal ? localSrc : cdnSrc, !useLocal);
 }
+
 
 function addPak(target) {
   if (!target) {
@@ -103,7 +103,7 @@ commands["spt"] = {
   execute: (args) => {
     function spter() {
       const action = args[0]; // "install"
-      const target = args[1]; // "hyfetch"
+      const target = args[1]; // e.g. "hyfetch"
 
       if (action === "install") {
         if (!target) {
