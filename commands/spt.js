@@ -2,6 +2,7 @@ let packagesInstalled = 2;
 let packages = ["bwash", "sudo"];
 const paksAvail = ["hyfetch", "htop"];
 
+
 const paks = ["sudo", "bwash", "hyfetch", "htop", "nnn"];
 
 window.sptLoaded = true;
@@ -40,7 +41,6 @@ function addpac(target) {
   const useLocal = location.protocol === 'file:' || location.hostname === 'localhost';
   loadScript(useLocal ? localSrc : cdnSrc, !useLocal);
 }
-
 
 function addPak(target) {
   if (!target) {
@@ -101,26 +101,24 @@ function sptUpgrade(pakName) {
 commands["spt"] = {
   level: 1,
   execute: (args) => {
-    function spter() {
-      const action = args[0]; // "install"
-      const target = args[1]; // e.g. "hyfetch"
+    const action = args[0]; // "install"
+    const target = args[1]; // "hyfetch"
 
-      if (action === "install") {
-        if (!target) {
-          printLine("bwash: spt: no package specified.");
-          return;
-        }
-        addPak(target);
-      } else if (action === "update") {
-        sptUpdate();
-      } else if (action === "upgrade") {
-        sptUpgrade(target);
-      } else if (action === "remove") {
-        delPak(target);
-      } else {
-        printLine(`bwash: spt: '${action}' not found.`);
+    if (action === "install") {
+      if (!target) {
+        printLine("bwash: spt: no package specified.");
+        return;
       }
-    };
-    spter()
+      addPak(target);
+    } else if (action === "update") {
+      sptUpdate();
+    } else if (action === "upgrade") {
+      sptUpgrade(target);
+    } else if (action === "remove") {
+      delPak(target);
+    } else {
+      printLine(`bwash: spt: '${action}' not found.`);
+    }
+    }
   },
 };
