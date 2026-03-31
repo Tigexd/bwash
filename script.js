@@ -299,6 +299,7 @@ const commands = {
         level: 1,
         execute: (args) => {
             dynamicallyLoadScript('commands/spt.js');
+            spt();
         }
     }
 
