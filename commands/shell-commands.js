@@ -31,7 +31,7 @@ commands['ls'] = {
         const currentDir = getDirFromPath(currentPath);
         const items = Object.keys(currentDir).sort();
         if (items.length > 0) {
-            printLine(items.join('&nbsp;&nbsp;&nbsp;'));
+            printLine(items.join('   '));
         }
     }
 };
@@ -73,16 +73,16 @@ commands['cd'] = {
 commands['bash'] = {
     level: 0,
     execute: (args) => {
-        const output = args.join(' ');
-        if (output === '--version') {
+        const optn = args.join(' ');
+        if (optn === '--version') {
             printLine(`
                 GNU bwash, version 1.13 - release(v8/blink-js-gnu)
                 Copyleft(C) 2026 ProtoGenuin, AG.
-License GPLv3 +: GNU GPL version 3 or later < http://gnu.org/licenses/gpl.html>
+License GPLv3+: GNU GPL version 3 or later < http://gnu.org/licenses/gpl.html>
 
 This is free software; you are free to change and redistribute it. BUT YOU ARE ABSOLUTELY NOT ALLOWED TO SELL THIS SOFTWARE FOR PROFIT. For details see the COPYING file that came with this software.
 There is NO WARRANTY, to the extent permitted by law.`);
-        } else if (output === '') {
+        } else if (optn === '') {
             renderPrompt();
         }
     }
