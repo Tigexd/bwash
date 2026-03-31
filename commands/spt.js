@@ -120,6 +120,7 @@ commands["spt"] = {
         printLine(`bwash: spt: '${action}' not found.`);
       }
     };
+    spt();
   },
 };
 
