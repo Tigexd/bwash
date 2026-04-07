@@ -10,7 +10,33 @@ function confirmation() {
   requestConfirmation("Continue? [Y/n] ", (answer) => {
     const normalized = answer.trim().toLowerCase();
     if (normalized === "" || normalized === "y" || normalized === "yes") {
-      printLine("OK");
+      printLine(`
+(content below are hardcoded as of beta stage)
+Get:1 http://spt.tigexd.org/meepian winter/main leg64 py-bin all 3.0052 [43.3 kB]
+Get:2 http://spt.tigexd.org/meepian winter/main leg64 emacsen-common all 3.0.8 [13.6 kB]
+Get:3 http://spt.tigexd.org/meepian winter/main leg64 make leg64 4.4.1-2 [463 kB]
+Get:4 http://spt.tigexd.org/meepian winter/main leg64 neofetch all 8.2.0b-11.1 [859 kB]
+Fetched 1,379 kB in 0s (4,744 kB/s)
+Preconfiguring packages ...
+Selecting previously unselected package py-bin.
+(Reading database ... 21127 files and directories currently installed.)
+Preparing to unpack .../archives/py_3.0052_all.mep ...
+Moving old data out of the way
+Unpacking py-bin (3.0052) ...
+Selecting previously unselected package emacsen-common.
+Preparing to unpack .../emacsen-common_3.0.8_all.mep ...
+Unpacking emacsen-common (3.0.8) ...
+Selecting previously unselected package make.
+Preparing to unpack .../make_4.4.1-2_amd64.mep ...
+Unpacking make (4.4.1-2) ...
+Selecting previously unselected package neofetch.
+Preparing to unpack .../neofetch_8.2.0b-11.1_all.mep ...
+Unpacking vm (8.2.0b-11.1) ...
+Setting up emacsen-common (3.0.8) ...
+Setting up make (4.4.1-2) ...
+Setting up python (3.0052) ...
+Setting up neofetch (8.2.0b-11.1) ...
+`);
       return;
     } else {
       printLine("Aborted.");
@@ -26,7 +52,7 @@ function addpac(target) {
     const script = document.createElement('script');
     script.src = src;
     script.async = true;
-    script.onload = () => printLine(`${target}.js loaded successfully`);
+    script.onload = () => console.log(`${target}.js loaded successfully`);
     script.onerror = () => {
       if (!isFallback) {
         loadScript(cdnSrc, true);

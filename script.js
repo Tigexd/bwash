@@ -268,7 +268,7 @@ const commands = {
     'version': {
         level: 0,
         execute: (args) => {
-            printLine("Meepian");
+            printLine(`Meepian - "winter"`);
             printLine("Version 0.1.16 (Alpha pre-release)");
             printLine("Meepian - An open source operating system that allow users to run Bwash shell :3");
             printLine(`(c) 2026 ProtoGenuin and Tiger; The name "Meepian" is inspired by iceboy501 :P`)
