@@ -4,6 +4,9 @@ const cmdInput = document.getElementById('command-input');
 
 let pendingConfirm = null;
 let pendingConfirmPrompt = null;
+const commandHistory = [];
+let historyIndex = 0;
+let stagedInput = '';
 
 var input = document.getElementById("command-input");
 input.addEventListener("keypress", function (event) {
@@ -17,11 +20,40 @@ input.addEventListener("keypress", function (event) {
 // Posted by Bite code, modified by community. See post 'Timeline' for change history
 // Retrieved 2026-03-18, License - CC BY-SA 4.0     |
 //                                                  v
+const loadedScripts = new Map();
 function dynamicallyLoadScript(url) {
-    var script = document.createElement("script");  // create a script DOM node
-    script.src = url;  // set its src to the provided URL
-    
-    document.head.appendChild(script);  // add it to the end of the head section of the page (could change 'head' to 'body' to add it to the end of the body section instead)
+    if (loadedScripts.has(url)) {
+        return loadedScripts.get(url);
+    }
+
+    const promise = new Promise((resolve, reject) => {
+        const existingScript = document.querySelector(`script[src="${url}"]`);
+        if (existingScript) {
+            if (existingScript.dataset.loaded === 'true') {
+                resolve();
+                return;
+            }
+            existingScript.addEventListener('load', () => {
+                existingScript.dataset.loaded = 'true';
+                resolve();
+            }, { once: true });
+            existingScript.addEventListener('error', () => reject(new Error(`Failed to load ${url}`)), { once: true });
+            return;
+        }
+
+        const script = document.createElement("script");
+        script.src = url;
+        script.async = true;
+        script.onload = () => {
+            script.dataset.loaded = 'true';
+            resolve();
+        };
+        script.onerror = () => reject(new Error(`Failed to load ${url}`));
+        document.head.appendChild(script);
+    });
+
+    loadedScripts.set(url, promise);
+    return promise;
 }
 // end :3
 
@@ -85,6 +117,7 @@ function getUptime() {
         localStorage.setItem('siteVisitStart', Date.now());
     }
     const startTime = localStorage.getItem('siteVisitStart');
+    let formattedTime = "00hours, 00mins, 00sec";
     function updateTimer() {
         const now = Date.now();
         const diff = now - startTime; // Difference in milliseconds
@@ -98,12 +131,10 @@ function getUptime() {
             String(hours).padStart(2, '0') + "hours, " +
             String(minutes).padStart(2, '0') + "mins, " +
             String(seconds).padStart(2, '0') + "sec";
+
+        localStorage.setItem("formattedTime", formattedTime);
+        uptime = formattedTime;
     }
-
-    localStorage.setItem("formattedTime", formattedTime);
-
-
-    uptime = formattedTime;
     setInterval(updateTimer, 1000);
     updateTimer(); // Initial call
 };
@@ -226,6 +257,7 @@ function getPromptPath() {
 // COMMAND REGISTRY
 // level 0 = normal user, level 1 = requires sudo
 // ==========================================
+let bootstrapSptCommand = null;
 const commands = {
 
     // Commands for funziez :D
@@ -297,9 +329,16 @@ const commands = {
 
     'spt': {
         level: 1,
-        execute: (args) => {
-            dynamicallyLoadScript('commands/spt.js');
-            spt();
+        execute: async (args) => {
+            await dynamicallyLoadScript('commands/spt.js');
+            if (typeof window.executeSptCommand === 'function') {
+                return window.executeSptCommand(args);
+            }
+            const runtimeSptCommand = commands['spt'];
+            if (runtimeSptCommand && runtimeSptCommand !== bootstrapSptCommand) {
+                return runtimeSptCommand.execute(args);
+            }
+            throw new Error('bwash: spt: loader finished but no spt handler was registered.');
         }
     }
 
@@ -308,6 +347,7 @@ const commands = {
     // spt, systemctl in commands/spt.js and whatever name i will choose.js
 
 };
+bootstrapSptCommand = commands['spt'];
 
 // Silly IP fetcher
 function getVisitorIP() {
@@ -405,6 +445,31 @@ if (!username) {
 
 // handle enter
 cmdInput.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowUp') {
+        if (commandHistory.length === 0) {
+            return;
+        }
+        e.preventDefault();
+        if (historyIndex === commandHistory.length) {
+            stagedInput = this.value;
+        }
+        historyIndex = Math.max(0, historyIndex - 1);
+        this.value = commandHistory[historyIndex];
+        this.setSelectionRange(this.value.length, this.value.length);
+        return;
+    }
+
+    if (e.key === 'ArrowDown') {
+        if (commandHistory.length === 0) {
+            return;
+        }
+        e.preventDefault();
+        historyIndex = Math.min(commandHistory.length, historyIndex + 1);
+        this.value = historyIndex === commandHistory.length ? stagedInput : commandHistory[historyIndex];
+        this.setSelectionRange(this.value.length, this.value.length);
+        return;
+    }
+
     if (e.key === 'Enter') {
         const val = this.value.trim();
 
@@ -432,14 +497,33 @@ cmdInput.addEventListener('keydown', function (e) {
                 const answer = val;
                 pendingConfirm = null;
                 pendingConfirmPrompt = null;
-                handler(answer);
-                if (!pendingConfirm) {
+                const confirmResult = handler(answer);
+                if (confirmResult && typeof confirmResult.then === 'function') {
+                    confirmResult
+                        .catch((error) => {
+                            console.error(error);
+                            printLine(`bwash: confirm: ${error.message || 'Unexpected error'}`);
+                        })
+                        .finally(() => {
+                            if (!pendingConfirm) {
+                                renderPrompt();
+                            }
+                        });
+                } else if (!pendingConfirm) {
                     renderPrompt();
                 }
                 this.value = '';
                 window.scrollTo(0, document.body.scrollHeight);
                 return;
             }
+
+            if (val !== "") {
+                if (commandHistory.length === 0 || commandHistory[commandHistory.length - 1] !== val) {
+                    commandHistory.push(val);
+                }
+            }
+            historyIndex = commandHistory.length;
+            stagedInput = '';
 
             if (val !== "") {
                 const parts = val.split(' ').filter(part => part.trim() !== '');
@@ -475,8 +559,20 @@ usage: sudo -e [-ABkNnS] [-r role] [-t type] [-C num] [-D directory]
                     if (cmd.level > 0 && !isSudo) {
                         printLine(`bwash: ${cmdName}: Permission denied`);
                     } else {
-                        cmd.execute(args);
-                        if (!pendingConfirm) {
+                        const commandResult = cmd.execute(args);
+                        if (commandResult && typeof commandResult.then === 'function') {
+                            commandResult
+                                .catch((error) => {
+                                    console.error(error);
+                                    printLine(`bwash: ${cmdName}: ${error.message || 'Unexpected error'}`);
+                                })
+                                .finally(() => {
+                                    if (!pendingConfirm) {
+                                        renderPrompt();
+                                    }
+                                    window.scrollTo(0, document.body.scrollHeight);
+                                });
+                        } else if (!pendingConfirm) {
                             renderPrompt(); // update prompt thing because for safety
                         }
                     }
@@ -489,6 +585,12 @@ usage: sudo -e [-ABkNnS] [-r role] [-t type] [-C num] [-D directory]
         // Clear input and scroll to bottom
         this.value = '';
         window.scrollTo(0, document.body.scrollHeight);
+    }
+});
+
+cmdInput.addEventListener('input', function () {
+    if (historyIndex === commandHistory.length) {
+        stagedInput = this.value;
     }
 });
 
