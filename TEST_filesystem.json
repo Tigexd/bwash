@@ -1,0 +1,29 @@
+{
+  "root/": {"children": {
+    "home/": {"children": {
+      "user/": {"children": {
+        "document.txt": {
+          "type": "txt",
+          "size": "1024",
+          "path": "/home/user/document.txt"
+          }
+        }
+      }
+    }
+  },
+    "config.json": {
+      "type": "json",
+      "size": "512",
+      "content": "{}"
+      }
+    }
+  }
+}
+# how to differentiate?
+# 
+# 
+# 
+# const var1;
+# if (var1.endswith("/")) {
+#   
+# }
