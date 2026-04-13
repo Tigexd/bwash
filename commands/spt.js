@@ -163,7 +163,7 @@
     if (!target) {
       printLine("bwash: spt: no package specified.");
       return;
-    }
+    } else {
 
     const index = await loadPackageIndex();
     const entry = index.packages.find((item) => item.name.toLowerCase() === target.toLowerCase());
@@ -171,7 +171,7 @@
       printLine(`bwash: spt: Unable to locate package '${target}' in ${index.source || "configured sources"}`);
       return;
     }
-
+  
     const installed = readInstalledPackages();
     if (installed.some((item) => item.toLowerCase() === entry.name.toLowerCase())) {
       printLine(`${entry.name} is already the newest version.`);
@@ -206,7 +206,7 @@ Summary:
       }
     });
   }
-
+  }
   function delPak(target) {
     if (!target) {
       printLine("bwash: spt: no package specified.");
