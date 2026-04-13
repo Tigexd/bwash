@@ -151,28 +151,9 @@ const baseFHS = {
         type: "dir", content: {
             "www": { type: "dir", content: {} }
         },
-        type: "dir", content: {
-            "lib": {
-                type: "dir", content: {
-                    "mpkg": {
-                        type: "dir", content: {
-                            "info": {
-                                type: "dir", content: {}
-                            }
-                        }
-                    }
-                }
-            }
-        }
     },
     "usr": {
-        type: "dir", content: {
-            "bin": { type: "dir", content: {} },
-            "sbin": {
-                type: "dir", content: {
-                }
-            },
-        }
+        type: "dir", content: {}
     },
 };
 
