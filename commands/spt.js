@@ -222,17 +222,37 @@ Summary:
   }
 
   async function sptUpgrade(target) {
+    const index = await loadPackageIndex(true);
+    printLine(`Reading package lists... done (${index.packages.length} package(s) available)`);
+
     if (!target) {
-      printLine("bwash: spt: no package specified.");
+      const installed = readInstalledPackages();
+      printLine(`${installed.length} package(s) installed, 0 upgradable.`);
+      printLine(`All packages are up to date.`);
       return;
     }
-    const index = await loadPackageIndex();
+
     const entry = index.packages.find((item) => item.name.toLowerCase() === target.toLowerCase());
     if (!entry) {
       printLine(`bwash: spt: Unable to locate package '${target}' in ${index.source || "configured sources"}`);
       return;
     }
-    printLine(`bwash: spt: '${entry.name}' is already up to date.`);
+
+    const installed = readInstalledPackages();
+    if (!installed.some((item) => item.toLowerCase() === entry.name.toLowerCase())) {
+      printLine(`bwash: spt: '${target}' is not installed. Use 'sudo spt install ${target}'.`);
+      return;
+    }
+
+    printLine(`${entry.name} is already at the newest version.`);
+  }
+
+  function sptList() {
+    const installed = readInstalledPackages();
+    printLine(`Installed packages (${installed.length}):`);
+    for (const pkg of installed) {
+      printLine(`  ${pkg}`);
+    }
   }
 
   async function executeSptCommand(args) {
@@ -240,7 +260,12 @@ Summary:
     const target = args[1];
 
     if (!action) {
-      printLine("Usage: spt <install|update|upgrade|remove> [package]");
+      printLine("Usage: spt <install|update|upgrade|remove|list> [package]");
+      return;
+    }
+
+    if (action === "list") {
+      sptList();
       return;
     }
 

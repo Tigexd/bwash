@@ -8,13 +8,6 @@ const commandHistory = [];
 let historyIndex = 0;
 let stagedInput = '';
 
-var input = document.getElementById("command-input");
-input.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        document.getElementById("trigBtn").click();
-    }
-});
 
 // Source - https://stackoverflow.com/a/950146
 // Posted by Bite code, modified by community. See post 'Timeline' for change history
@@ -161,6 +154,8 @@ const baseFHS = {
 let username = localStorage.getItem('terminal_user');
 let fileSystem = JSON.parse(localStorage.getItem('bwash_fs'));
 let currentPath = []; // Array representing path. Empty array = '/'
+let uptime = '';
+let failedFetch = false;
 
 // initialize File System if it doesn't exist
 if (!fileSystem) {
@@ -373,11 +368,7 @@ function getVisitorIP() {
             printLine(`<span style="color: red;">Failed to fetch IPv4 address. This may be due to your network configuration or opening the page in a private browser window.</span>`);
             failedFetch = true;
         })
-        .finally(() => clearTimeout(timerId4))
-        ;
-
-    navigator.userAgentData.getHighEntropyValues(["platform", "platformVersion", "architecture", "model", "uaFullVersion"])
-
+        .finally(() => clearTimeout(timerId4));
 
     // ipv6 grabber
 

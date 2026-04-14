@@ -1,0 +1,17 @@
+[
+  {
+    "name": "hyfetch",
+    "Dependencies": "none",
+    "Size": "4.81 KiB"
+  },
+  {
+    "name": "htop",
+    "Dependencies": "none",
+    "Size": "2.1 KiB"
+  },
+  {
+    "name": "nnn",
+    "Dependencies": "none",
+    "Size": "1.4 KiB"
+  }
+]
